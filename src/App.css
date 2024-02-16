@@ -3,8 +3,8 @@
 }
 
 .App-logo {
-  height: 40vmin;
-  pointer-events: none;
+  height: 300px; /* Increase the logo size */
+  margin-bottom:-100px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,16 +14,27 @@
 }
 
 .App-header {
-  background-color: #c7c7c8;
+  background-color: #4680a6;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: black;
+  color: rgb(31, 11, 11);
 }
 
 .App-link {
   color: #61dafb;
 }
+
+.App-icon {
+  height: 150px;
+  width:auto;
+  margin-left:210px;
+  margin-top: -150px;
+  
+  
+}
+
+
