@@ -1,8 +1,9 @@
+import React from 'react';
+import { Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
-import List from './List/List';
 import icon from './icon.svg';
-import Post from './Post/Post'
+import Post from './Post/Post';
 
 function App() {
   return (
@@ -11,8 +12,10 @@ function App() {
         <img src={logo} className="App-logo" alt="logo" />
         <img src={icon} className="App-icon" alt="icon" />
 
-        <List text="This is some text.." />
-        <Post text ="Thisis some text...2" />
+        <Post text="This is some text...2" />
+
+        {/* Add a Link to the Register page */}
+        <Link to="/register">Go to Register</Link>
       </header>
     </div>
   );
