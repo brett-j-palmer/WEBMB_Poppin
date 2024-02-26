@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import List from './List/List';
 import icon from './icon.svg';
+import Post from './Post/Post'
 
 function App() {
   return (
@@ -11,6 +12,7 @@ function App() {
         <img src={icon} className="App-icon" alt="icon" />
 
         <List text="This is some text.." />
+        <Post text ="Thisis some text...2" />
       </header>
     </div>
   );
