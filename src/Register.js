@@ -19,10 +19,8 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // Add your logic for handling the Register (e.g., sending data to a server)
     console.log('Register submitted with:', { username, password });
 
-    // Reset the form fields
     setUsername('');
     setPassword('');
   };

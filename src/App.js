@@ -13,8 +13,6 @@ function App() {
         <img src={icon} className="App-icon" alt="icon" />
 
         <Post text="This is some text...2" />
-
-        {/* Add a Link to the Register page */}
         <Link to="/register">Go to Register</Link>
       </header>
     </div>
