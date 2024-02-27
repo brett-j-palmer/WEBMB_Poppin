@@ -12,7 +12,7 @@ function PostControl(props) {
         e.preventDefault();
         props.addItem(text, file)
         setText("");
-        setFile("");
+        // setFile("");
     }
 
     function handleChange(e) {
