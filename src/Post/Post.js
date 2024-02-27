@@ -1,26 +1,40 @@
-import React, { useState, useEffect } from 'react';
-// import './Post.css'
+import React from "react";
+import PostItem from "./PostItem";
+import PostControl from "./PostControl";
 
-export default function UploadImages() {
-    const [images, setImages] = useState([]);
-    const [imageURLs, setImageURLs] = useState([]);
+function Post(props) {
+    const [postItems, setPostItems] = React.useState([]);
 
-    useEffect(() => {
-        if (images.length < 1) return;
-        const newImageUrls = [];
-        images.forEach(image => newImageUrls.push(URL.createObjectURL(image)));
-        setImageURLs(newImageUrls);
 
-    }, [images]);
+    const addItem = (text, file) => {
+        var newItem = {id: postItems.length+1, text: text, file: file}
+        var newArray = [...postItems]
+        newArray.push(newItem)
+        setPostItems(newArray)
+    };
 
-    function onImageChange(e) {
-        setImages([...e.target.files])
-    }
+    const removeItem = (id) => {
+        var newArray = [...postItems].filter((item) => item.id !== id)
+        setPostItems(newArray)
+    };
 
     return (
-        <>
-            <input type="file" multiple accept="image/*" onChange={onImageChange} /> 
-            {imageURLs.map(imageSrc => <img src = {imageSrc} width={500}/>)}
-        </>
+        <div>
+            <ul>
+                {postItems.map(item => (
+                    <PostItem
+                        key = {item.id}
+                        id = {item.id}
+                        file = {item.file}
+                        text = {item.text}
+                        removeItem = {removeItem}
+                    />
+                ))}
+            </ul>
+            <PostControl addItem={addItem} />
+        </div>
     );
 }
+
+export default Post;
+
