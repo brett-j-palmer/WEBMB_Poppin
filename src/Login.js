@@ -1,77 +1,58 @@
-const express = require("express");
-const app = express();
+import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 
-app.use(express.static('public'));
-app.use(express.urlencoded({ extended: false }));
+function Login() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const navigate = useNavigate();
 
-function htmlStart(res) {
-    res.write(`<!DOCTYPE html>
-        <head>
-            <title>Login</title>
-        </head>
-        <body>`);
-}
+  const handleUsernameChange = (e) => {
+    setUsername(e.target.value);
+  };
 
-function htmlEnd(res) {
-    res.end(`</body>
-    </html>`);
-}
+  const handlePasswordChange = (e) => {
+    setPassword(e.target.value);
+  };
 
-let loginData = [];
+  const handleSubmit = (e) => {
+    e.preventDefault();
 
-app.post('/login', (req, res) => {
-    const { usernameTry, passwordTry } = req.body;
-    const user = loginData.find(user => user.username === usernameTry && user.password === passwordTry);
-    if (user) {
-        res.redirect('homepage.html');
+    if (username === 'user' && password === 'pass') {
+      console.log('Login successful');
+      navigate('/Post');
     } else {
-        res.redirect('login.html');
+      console.log('Invalid credentials');
     }
-});
 
-app.get('/logout', (req, res) => {
-    res.redirect('login.html');
-});
+    setUsername('');
+    setPassword('');
+  };
 
-
-return (
-    <div className="Login">
-      <h2>Login Page</h2>
-      <form onSubmit={handleSubmit}>
-        <label>
-          Username:
-          <input type="text" value={username} onChange={e => setUsername(e.target.value)} />
-        </label>
-        <br />
-        <label>
-          Password:
-          <input type="password" value={password} onChange={e => setPassword(e.target.value)} />
-        </label>
-        <br />
-        <button type="submit">Login</button>
-      </form>
+  return (
+    <div className="App">
+      <header className="App-header">
+        <div className="Login">
+          <h2>Login Page</h2>
+          <form onSubmit={handleSubmit}>
+            <label>
+              Username:
+              <input type="text" value={username} onChange={handleUsernameChange} />
+            </label>
+            <br />
+            <label>
+              Password:
+              <input type="password" value={password} onChange={handlePasswordChange} />
+            </label>
+            <br />
+            <button type="submit">Login</button>
+          </form>
+          <p>
+            Don't have an account? <Link to="/register">Register</Link>
+          </p>
+        </div>
+      </header>
     </div>
-);
+  );
+}
 
-
-const reactComponentHTML = ReactDOMServer.renderToString(<LoginForm />);
-
-
-const fullHTML = `
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Full-stack App</title>
-</head>
-<body>
-<div id="app">${reactComponentHTML}</div>
-<script src="frontend.js"></script>
-</body>
-</html>
-`;
-
-app.get('/', (req, res) => {
-res.send(fullHTML); 
-});
+export default Login;
