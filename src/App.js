@@ -1,5 +1,4 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import icon from './icon.svg';
@@ -13,7 +12,6 @@ function App() {
         <img src={icon} className="App-icon" alt="icon" />
 
         <Post text="This is some text...2" />
-        <Link to="/register">Go to Register</Link>
       </header>
     </div>
   );

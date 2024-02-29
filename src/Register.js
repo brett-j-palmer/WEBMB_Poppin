@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logo from './logo.svg';
 import './App.css';
 import icon from './icon.svg';
 
-function App() {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-
+  const navigate = useNavigate();
   const handleUsernameChange = (e) => {
     setUsername(e.target.value);
   };
@@ -19,7 +19,10 @@ function App() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
+    // NEEDS REGISTER LOGIC HERE
+
     console.log('Register submitted with:', { username, password });
+    navigate('/login');
 
     setUsername('');
     setPassword('');
@@ -46,10 +49,13 @@ function App() {
             <br />
             <button type="submit">Register</button>
           </form>
+          <p>
+            Already have an account? <Link to="/login">Login</Link>
+          </p>
         </div>
       </header>
     </div>
   );
 }
 
-export default App;
+export default Register;
