@@ -1,13 +1,14 @@
-import React from "react";
+import { useState } from "react";
 import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 
+
 function Post(props) {
-    const [postItems, setPostItems] = React.useState([]);
+    const [postItems, setPostItems] = useState([]);
 
 
-    const addItem = (text, file) => {
-        var newItem = {id: postItems.length+1, text: text, file: file}
+    const addItem = (text, file, caption, rating) => {
+        var newItem = {id: postItems.length+1, text, file, caption, rating}
         var newArray = [...postItems]
         newArray.push(newItem)
         setPostItems(newArray)
@@ -27,6 +28,8 @@ function Post(props) {
                         id = {item.id}
                         file = {item.file}
                         text = {item.text}
+                        caption={item.caption}
+                        rating={item.rating}
                         removeItem = {removeItem}
                     />
                 ))}

@@ -2,6 +2,7 @@ import React from "react";
 import Caption from "../caption&rating/Caption"
 import Rating from '../caption&rating/Rating'
 
+
 function PostControl(props) {
     const [text, setText] = React.useState("");
     const [file, setFile] = React.useState();
@@ -21,6 +22,14 @@ function PostControl(props) {
         // setFile("");
     }
 
+    const handleCaptionChange = value =>{
+        setCaption(value);
+        }
+    const handleRatingChange= value =>{
+        setRating(value);
+    }
+    
+    
     function handleChange(e) {
         console.log(e.target.files);
         // Check if a file was selected
@@ -32,12 +41,11 @@ function PostControl(props) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <ul><input type="text" name="text" value={text} onChange={onChange} data-testid="new_item_text" placeholder="Enter Text Here..." /></ul>
-            <ul><input type="file" onChange={handleChange} /></ul>
-            <Caption onChange={setCaption}/>
-            <Rating onChange={setRating}/>
-
-            <ul><input type="submit" value="Create Post" data-testid="item_submit" /></ul>
+            <input type="text" name="text" value={text} onChange={onChange} data-testid="new_item_text" placeholder="Enter Text Here..." />
+            <input type="file" onChange={handleChange} />
+            <Caption value={caption} onChange={handleCaptionChange}/>
+            <Rating value={rating} onChange={handleRatingChange}/>
+            <input type="submit" value="Create Post" data-testid="item_submit" />
         </form>
     );
 }

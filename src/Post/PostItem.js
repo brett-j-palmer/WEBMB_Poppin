@@ -5,9 +5,8 @@ function PostItem(props) {
         <div>
             <img src={props.file} width={450} alt="" />
             <p>{props.text}</p>
-            <p>Caption: {props.Caption}</p>
-            <p>Rating: {props.Rating}</p>
-
+            <p>{props.caption}</p>
+            <p> Your rating: {props.rating}/10 </p>
             <button onClick={() => props.removeItem(props.id)}>Remove</button>
         </div>
     );
