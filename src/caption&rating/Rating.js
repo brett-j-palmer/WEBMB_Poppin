@@ -1,4 +1,5 @@
 import React from "react";
+
 function Rating(props){
     const handleRatingChange = e =>{
         const newRating = parseInt(e.target.value)
@@ -12,7 +13,7 @@ function Rating(props){
         <input 
             type="number"
             onChange={handleRatingChange} 
-            min={1} 
+            min={0} 
             max = {10}
             placeholder="Rate:" 
             
