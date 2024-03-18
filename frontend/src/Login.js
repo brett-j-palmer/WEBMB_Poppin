@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Add this line
 
 function Login() {
   const [username, setUsername] = useState('');
@@ -14,14 +15,15 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (username === 'user' && password === 'pass') {
-      console.log('Login successful');
+    try {
+      const response = await axios.post('http://localhost:5001/users/login', { username, password });
+      console.log('Login successful:', response.data);
       navigate('/Post');
-    } else {
-      console.log('Invalid credentials');
+    } catch (error) {
+      console.error('Login failed:', error.message);
     }
 
     setUsername('');
