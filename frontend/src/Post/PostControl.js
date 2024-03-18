@@ -41,8 +41,10 @@ function PostControl(props) {
 
     return (
         <form onSubmit={handleSubmit}>
-            <input type="text" name="text" value={text} onChange={onChange} data-testid="new_item_text" placeholder="Enter Text Here..." />
-            <input type="file" onChange={handleChange} />
+            {/* <input type="text" name="text" value={text} onChange={onChange} data-testid="new_item_text" placeholder="Enter Text Here..." /> */}
+            <div style={{ marginBottom: "-35px" }}>
+                <input type="file" onChange={handleChange} />
+            </div>
             <Caption value={caption} onChange={handleCaptionChange}/>
             <Rating value={rating} onChange={handleRatingChange}/>
             <input type="submit" value="Create Post" data-testid="item_submit" />
