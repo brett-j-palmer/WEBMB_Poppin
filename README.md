@@ -6,6 +6,7 @@ To Use:
 3) npm install express cors mongoose dotenv
 4) npm install -g nodemon  --> may need to type "sudo" before
 5) npm install npm-run-all
+6) npm install axios
 5) nodemon server
 6) npm start
 
