@@ -8,6 +8,7 @@ To Use: #Must be in /frontend
 5) npm install npm-run-all
 6) npm install axios
 7) npm install mongodb
-8) npm start
+8) Look in .env for instructions on accessing database
+9) npm start
 
 To test server --> 7) nodemon server
