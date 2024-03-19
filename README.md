@@ -10,5 +10,3 @@ To Use: #Must be in /frontend
 7) npm start
 
 To test server --> 7) nodemon server
-
-For now, you must use username = "user" and password = "pass" to login
