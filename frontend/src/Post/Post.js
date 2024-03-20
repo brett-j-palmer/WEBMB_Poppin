@@ -11,8 +11,9 @@ function Post(props) {
     const currentUser = "User";
 
     const addItem = (text, file, caption, rating) => {
-        const newItem = { id: postItems.length + 1, text, file, caption, rating };
-        const newArray = [...postItems, newItem];
+        var newItem = { id: postItems.length + 1, text, file, caption, rating };
+        var newArray = [...postItems, newItem];
+        newArray.push(newItem)
         setPostItems(newArray);
     };
 
@@ -24,7 +25,7 @@ function Post(props) {
     };
 
     const removeItem = (id) => {
-        const newArray = postItems.filter((item) => item.id !== id);
+        var newArray = postItems.filter((item) => item.id !== id);
         setPostItems(newArray);
     };
 
