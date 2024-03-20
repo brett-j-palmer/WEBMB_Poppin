@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 import Comment from "./Comment";
-
+import axios from 'axios';
 
 
 function Post(props) {
@@ -10,11 +10,38 @@ function Post(props) {
     const [comments, setComments] = useState([]);
     const currentUser = "User";
 
-    const addItem = (text, file, caption, rating) => {
-        var newItem = { id: postItems.length + 1, text, file, caption, rating };
-        var newArray = [...postItems, newItem];
-        newArray.push(newItem)
-        setPostItems(newArray);
+    useEffect(() => {
+        fetchPosts();
+    }, []);
+
+    const fetchPosts = () => {
+        axios.get('http://localhost:5001/posts')
+            .then(response => {
+                // Map the response data to extract the id field
+                const postsWithIds = response.data.map(post => ({
+                    id: post._id,
+                    file: post.file,
+                    caption: post.caption,
+                    rating: post.rating
+                }));
+                setPostItems(postsWithIds); // Update the state with fetched posts
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error);
+            });
+    };
+
+
+
+    const addItem = (postData) => {
+        axios.post('http://localhost:5001/posts/add', postData) // Send post data directly
+            .then(response => {
+                console.log('Post added successfully:', response.data);
+                fetchPosts(); // Fetch posts after successful addition
+            })
+            .catch(error => {
+                console.error('Error adding post:', error);
+            });
     };
 
     const addComment = (user_comment) => {
@@ -25,8 +52,16 @@ function Post(props) {
     };
 
     const removeItem = (id) => {
-        var newArray = postItems.filter((item) => item.id !== id);
-        setPostItems(newArray);
+        // not currently working
+        console.log("Removing post with id:", id); // Log the id
+        axios.delete(`http://localhost:5001/posts/${id}`)
+            .then(response => {
+                console.log('Post deleted successfully:', response.data);
+                fetchPosts(); // Fetch posts after successful deletion
+            })
+            .catch(error => {
+                console.error('Error deleting post:', error);
+            });
     };
 
     const removeComment = (id) => {

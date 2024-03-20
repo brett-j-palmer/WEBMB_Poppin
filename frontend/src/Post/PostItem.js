@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import heartImage from './heart.png'
 import thumbsUpImage from './thumbs-up.png'
 
 function PostItem(props) {
+    console.log("PostItemCreated?", props.id)
     const [liked, setLiked] = React.useState(false);
 
 
@@ -21,7 +22,9 @@ function PostItem(props) {
             <button onClick={toggleLike}>
             <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
             </button> <br />
-            <button onClick={() => props.removeItem(props.id)}>Remove</button>
+            <button onClick={() => {
+                console.log(props.id)
+                props.removeItem(props.id)}}>Remove Post</button>
             <input
                 type="text"
                 placeholder="Add a comment: "
