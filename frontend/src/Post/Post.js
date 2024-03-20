@@ -1,22 +1,37 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import PostItem from "./PostItem";
 import PostControl from "./PostControl";
+import Comment from "./Comment";
+
 
 
 function Post(props) {
     const [postItems, setPostItems] = useState([]);
-
+    const [comments, setComments] = useState([]);
+    const currentUser = "User";
 
     const addItem = (text, file, caption, rating) => {
-        var newItem = {id: postItems.length+1, text, file, caption, rating}
-        var newArray = [...postItems]
+        var newItem = { id: postItems.length + 1, text, file, caption, rating };
+        var newArray = [...postItems, newItem];
         newArray.push(newItem)
-        setPostItems(newArray)
+        setPostItems(newArray);
+    };
+
+    const addComment = (user_comment) => {
+        if (currentUser && user_comment) {
+            const newComment = { id: comments.length + 1, user: currentUser, user_comment };
+            setComments([...comments, newComment]);
+        }
     };
 
     const removeItem = (id) => {
-        var newArray = [...postItems].filter((item) => item.id !== id)
-        setPostItems(newArray)
+        var newArray = postItems.filter((item) => item.id !== id);
+        setPostItems(newArray);
+    };
+
+    const removeComment = (id) => {
+        const newComments = comments.filter((comment) => comment.id !== id);
+        setComments(newComments);
     };
 
     return (
@@ -24,17 +39,27 @@ function Post(props) {
             <ul>
                 {postItems.map(item => (
                     <PostItem
-                        key = {item.id}
-                        id = {item.id}
-                        file = {item.file}
-                        text = {item.text}
+                        key={item.id}
+                        id={item.id}
+                        file={item.file}
+                        text={item.text}
                         caption={item.caption}
                         rating={item.rating}
-                        removeItem = {removeItem}
+                        removeItem={removeItem}
+                    />
+                ))}
+                {comments.map((comment) => (
+                    <Comment
+                        key={comment.id}
+                        id={comment.id}
+                        user={comment.user}
+                        user_comment={comment.user_comment}
+                        removeComment={removeComment}
                     />
                 ))}
             </ul>
             <PostControl addItem={addItem} />
+            
         </div>
     );
 }
