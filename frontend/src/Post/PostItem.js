@@ -1,9 +1,10 @@
-import React from "react";
+import React, { useState } from "react";
 import heartImage from './heart.png'
 import thumbsUpImage from './thumbs-up.png'
 
 function PostItem(props) {
     const [liked, setLiked] = React.useState(false);
+
 
     const toggleLike = () => {
         setLiked(!liked);
@@ -21,6 +22,11 @@ function PostItem(props) {
             <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
             </button> <br />
             <button onClick={() => props.removeItem(props.id)}>Remove</button>
+            <input
+                type="text"
+                placeholder="Add a comment: "
+                style={{ color: "black", fontStyle:"Arial"}}
+            />
         </div>
     );
 }
