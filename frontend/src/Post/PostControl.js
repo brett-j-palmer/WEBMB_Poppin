@@ -13,10 +13,10 @@ function PostControl(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.addItem(text, file, caption, rating)
+        props.addItem({ text, file, caption, rating }); // Pass post data as an object
         setText("");
         setCaption("");
-        setRating("")
+        setRating("");
         // setFile("");
     }
 
@@ -49,4 +49,3 @@ function PostControl(props) {
     );
 }
 
-export default PostControl

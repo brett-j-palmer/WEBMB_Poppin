@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 import Comment from "./Comment";
-import CommentControl from "./CommentControl";
+
 
 function Post(props) {
   const [postItems, setPostItems] = useState([]);
@@ -10,12 +10,41 @@ function Post(props) {
   const [showComments, setShowComments] = useState(false);
   const currentUser = "User";
 
-  const addItem = (text, file, caption, rating) => {
-    const newItem = { id: postItems.length + 1, text, file, caption, rating };
-    const newArray = [...postItems, newItem];
-    setPostItems(newArray);
-    setShowComments(true); 
+ 
   };
+    useEffect(() => {
+        fetchPosts();
+    }, []);
+
+    const fetchPosts = () => {
+        axios.get('http://localhost:5001/posts')
+            .then(response => {
+                // Map the response data to extract the id field
+                const postsWithIds = response.data.map(post => ({
+                    id: post._id,
+                    file: post.file,
+                    caption: post.caption,
+                    rating: post.rating
+                }));
+                setPostItems(postsWithIds); // Update the state with fetched posts
+            })
+            .catch(error => {
+                console.error('Error fetching posts:', error);
+            });
+    };
+
+
+
+    const addItem = (postData) => {
+        axios.post('http://localhost:5001/posts/add', postData) // Send post data directly
+            .then(response => {
+                console.log('Post added successfully:', response.data);
+                fetchPosts(); // Fetch posts after successful addition
+            })
+            .catch(error => {
+                console.error('Error adding post:', error);
+            });
+    };
 
   const addComment = (user_comment) => {
     //if (currentUser && user_comment) {
@@ -29,13 +58,6 @@ function Post(props) {
       };
       setComments([...comments, newComment]);
     }
-  };
-
-  const removeItem = (id) => {
-    const newArray = postItems.filter((item) => item.id !== id);
-    setPostItems(newArray);
-    setShowComments(false);
-    removeComment = removeComment
   };
 
   const removeComment = (id) => {
