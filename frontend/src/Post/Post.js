@@ -18,6 +18,7 @@ function Post(props) {
   };
 
   const addComment = (user_comment) => {
+    //if (currentUser && user_comment) {
     if (user_comment && currentUser) {
       const currentTime = new Date().toLocaleString();
       const newComment = {
@@ -79,7 +80,3 @@ function Post(props) {
 }
 
 export default Post
-
-
-
-

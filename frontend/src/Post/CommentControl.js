@@ -6,13 +6,14 @@ function CommentControl({ addComment, currentUser }) {
     const handleCommentChange = (event) => {
         setCommentText(event.target.value);
     };
+
     const handleSubmitComment = () => {
         if (commentText.trim() !== "") {
             addComment(commentText, currentUser);
-            //addComment(currentUser, commentText);
             setCommentText("");
         }
     };
+
     return (
         <div>
             <input

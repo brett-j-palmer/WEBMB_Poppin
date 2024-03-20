@@ -50,4 +50,3 @@ function PostControl(props) {
 }
 
 export default PostControl
-
