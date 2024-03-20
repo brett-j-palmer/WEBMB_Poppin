@@ -1,14 +1,15 @@
 import React, { useState } from "react";
 
-function CommentControl({addComment }){
-    const [commentText, setCommentText]= useState("");
+function CommentControl({ addComment, currentUser }) {
+    const [commentText, setCommentText] = useState("");
 
     const handleCommentChange = (event) => {
         setCommentText(event.target.value);
     };
     const handleSubmitComment = () => {
-        if (commentText.trim() !== ""){
-            addComment(commentText);
+        if (commentText.trim() !== "") {
+            addComment(commentText, currentUser);
+            //addComment(currentUser, commentText);
             setCommentText("");
         }
     };

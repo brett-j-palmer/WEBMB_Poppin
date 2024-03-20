@@ -22,11 +22,6 @@ function PostItem(props) {
             <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
             </button> <br />
             <button onClick={() => props.removeItem(props.id)}>Remove</button>
-            <input
-                type="text"
-                placeholder="Add a comment: "
-                style={{ color: "black", fontStyle:"Arial"}}
-            />
         </div>
     );
 }

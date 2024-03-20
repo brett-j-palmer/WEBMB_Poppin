@@ -1,8 +1,6 @@
 import React from "react";
 import Caption from "../caption&rating/Caption"
 import Rating from '../caption&rating/Rating'
-
-
 function PostControl(props) {
     const [text, setText] = React.useState("");
     const [file, setFile] = React.useState();
@@ -46,10 +44,10 @@ function PostControl(props) {
             <Caption value={caption} onChange={handleCaptionChange}/>
             <Rating value={rating} onChange={handleRatingChange}/>
             <input type="submit" value="Create Post" data-testid="item_submit" />
+            
         </form>
     );
 }
 
-export default PostControl;
-
+export default PostControl
 
