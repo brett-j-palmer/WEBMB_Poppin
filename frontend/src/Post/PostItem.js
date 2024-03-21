@@ -18,7 +18,8 @@ function PostItem(props) {
         <div style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
             <img src={props.file} width={450} alt="" /> <br />
             {props.caption} <br />
-            Your rating: {props.rating}/10 <br />
+            {props.rating}/10 <br />
+            #{props.tag} <br />
             <button onClick={toggleLike}>
                 <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
             </button> <br />

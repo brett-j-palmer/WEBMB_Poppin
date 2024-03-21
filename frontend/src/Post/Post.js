@@ -23,7 +23,8 @@ function Post(props) {
                     id: post._id,
                     file: post.file,
                     caption: post.caption,
-                    rating: post.rating
+                    rating: post.rating,
+                    tag: post.tag
                 }));
                 setPostItems(postsWithIds); // Update the state with fetched posts
             })
@@ -90,6 +91,7 @@ function Post(props) {
                         file={item.file}
                         caption={item.caption}
                         rating={item.rating}
+                        tag = {item.tag}
                         removeItem={removeItem}
                         addComment={addComment}
                         comments={comments.filter(comment => comment.postId === item.id)}

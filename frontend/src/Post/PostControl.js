@@ -1,12 +1,14 @@
 import React from "react";
-import Caption from "../caption&rating/Caption";
-import Rating from '../caption&rating/Rating';
+import Caption from "../caption&rating&tag/Caption";
+import Rating from '../caption&rating&tag/Rating';
+import Tag from "../caption&rating&tag/Tag";
 
 function PostControl(props) {
     const [text, setText] = React.useState("");
     const [file, setFile] = React.useState();
     const [caption, setCaption] = React.useState("");
     const [rating, setRating] = React.useState("");
+    const [tag, setTag] = React.useState("");
 
     const onChange = e => {
         setText(e.target.value);
@@ -14,10 +16,11 @@ function PostControl(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.addItem({ text, file, caption, rating });
+        props.addItem({ text, file, caption, rating, tag });
         setText("");
         setCaption("");
         setRating("");
+        setTag("");
     };
 
     const handleCaptionChange = value => {
@@ -27,6 +30,10 @@ function PostControl(props) {
     const handleRatingChange = value => {
         setRating(value);
     };
+
+    const handleTagChange = value => {
+        setTag(value);
+    }
 
     function handleChange(e) {
         console.log(e.target.files);
@@ -44,6 +51,7 @@ function PostControl(props) {
                 <input type="file" onChange={handleChange} />
             <Caption value={caption} onChange={handleCaptionChange}/>
             <Rating value={rating} onChange={handleRatingChange}/>
+            <Tag value={tag} onChange={handleTagChange}/>
             <input type="submit" value="Create Post" data-testid="item_submit" />
         </form>
     );
