@@ -2,13 +2,14 @@ import React, { useState, useEffect } from "react";
 import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 import Comment from "./Comment";
+import CommentControl from "./CommentControl";
 import axios from 'axios';
-
 
 function Post(props) {
     const [postItems, setPostItems] = useState([]);
     const [comments, setComments] = useState([]);
-    const currentUser = "User";
+    const [showComments, setShowComments] = useState(false);
+    const currentUser = "User"; 
 
     useEffect(() => {
         fetchPosts();
@@ -31,8 +32,6 @@ function Post(props) {
             });
     };
 
-
-
     const addItem = (postData) => {
         axios.post('http://localhost:5001/posts/add', postData) // Send post data directly
             .then(response => {
@@ -42,27 +41,39 @@ function Post(props) {
             .catch(error => {
                 console.error('Error adding post:', error);
             });
+            setShowComments(true);
     };
 
-    const addComment = (user_comment) => {
-        if (currentUser && user_comment) {
-            const newComment = { id: comments.length + 1, user: currentUser, user_comment };
+    const addComment = (postId, user_comment) => {
+        if (user_comment) {
+            const currentTime = new Date().toLocaleString();
+            const newComment = {
+                id: comments.length + 1,
+                postId: postId, // Associate the comment with the post
+                user: "User", 
+                user_comment: user_comment,
+                time: currentTime,
+            };
             setComments([...comments, newComment]);
         }
     };
+    
 
     const removeItem = (id) => {
-        // not currently working
+        // Remove the post
         console.log("Removing post with id:", id); // Log the id
         axios.delete(`http://localhost:5001/posts/${id}`)
             .then(response => {
                 console.log('Post deleted successfully:', response.data);
                 fetchPosts(); // Fetch posts after successful deletion
+                // Remove comments associated with the deleted post
+                setComments(comments.filter(comment => comment.postId !== id));
             })
             .catch(error => {
                 console.error('Error deleting post:', error);
             });
     };
+    
 
     const removeComment = (id) => {
         const newComments = comments.filter((comment) => comment.id !== id);
@@ -77,27 +88,20 @@ function Post(props) {
                         key={item.id}
                         id={item.id}
                         file={item.file}
-                        text={item.text}
                         caption={item.caption}
                         rating={item.rating}
                         removeItem={removeItem}
-                    />
-                ))}
-                {comments.map((comment) => (
-                    <Comment
-                        key={comment.id}
-                        id={comment.id}
-                        user={comment.user}
-                        user_comment={comment.user_comment}
-                        removeComment={removeComment}
+                        addComment={addComment}
+                        comments={comments.filter(comment => comment.postId === item.id)}
                     />
                 ))}
             </ul>
             <PostControl addItem={addItem} />
-            
         </div>
     );
 }
 
 export default Post;
+
+
 
