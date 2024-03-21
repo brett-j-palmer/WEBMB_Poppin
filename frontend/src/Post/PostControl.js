@@ -1,7 +1,6 @@
 import React from "react";
-import Caption from "../caption&rating/Caption"
-import Rating from '../caption&rating/Rating'
-
+import Caption from "../caption&rating/Caption";
+import Rating from '../caption&rating/Rating';
 
 function PostControl(props) {
     const [text, setText] = React.useState("");
@@ -15,21 +14,20 @@ function PostControl(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.addItem({ text, file, caption, rating }); // Pass post data as an object
+        props.addItem({ text, file, caption, rating });
         setText("");
         setCaption("");
         setRating("");
-        // setFile("");
-    }
+    };
 
-    const handleCaptionChange = value =>{
+    const handleCaptionChange = value => {
         setCaption(value);
-        }
-    const handleRatingChange= value =>{
+    };
+
+    const handleRatingChange = value => {
         setRating(value);
-    }
-    
-    
+    };
+
     function handleChange(e) {
         console.log(e.target.files);
         // Check if a file was selected
@@ -38,6 +36,7 @@ function PostControl(props) {
             setFile(URL.createObjectURL(e.target.files[0]));
         }
     }
+
 
     return (
         <form onSubmit={handleSubmit}>
@@ -49,5 +48,6 @@ function PostControl(props) {
         </form>
     );
 }
-
 export default PostControl;
+
+
