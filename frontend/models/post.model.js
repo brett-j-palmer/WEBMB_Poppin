@@ -16,6 +16,10 @@ const postSchema = new Schema({
       required: true,
       min: 0,
       max: 10
+    },
+    tag: {
+      type: String,
+      required: true
     }
   }, {
     timestamps: true,
