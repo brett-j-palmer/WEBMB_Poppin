@@ -10,7 +10,6 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <img src={icon} className="App-icon" alt="icon" />
-
         <Post text="This is some text...2" />
       </header>
     </div>

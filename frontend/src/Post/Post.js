@@ -9,7 +9,6 @@ function Post(props) {
     const [postItems, setPostItems] = useState([]);
     const [comments, setComments] = useState([]);
     const [showComments, setShowComments] = useState(false);
-    const currentUser = "User"; 
 
     useEffect(() => {
         fetchPosts();
@@ -49,25 +48,37 @@ function Post(props) {
         if (user_comment) {
             const currentTime = new Date().toLocaleString();
             const newComment = {
-                id: comments.length + 1,
-                postId: postId, // Associate the comment with the post
-                user: "User", 
+                id: Date.now(), // Use current timestamp as a unique id
+                postId: postId,
+                user: "User",
                 user_comment: user_comment,
                 time: currentTime,
             };
             setComments([...comments, newComment]);
         }
     };
+    const addReply = (commentId, replyText) => {
+        const updatedComments = comments.map(comment => {
+          if (comment.id === commentId) {
+            return {
+              ...comment,
+              replies: [...comment.replies, { id: Date.now(), user: "User", time: new Date().toLocaleString(), user_comment: replyText }]
+            };
+          }
+          return comment;
+        });
+        setComments(updatedComments);
+      };
+    
     
 
     const removeItem = (id) => {
         // Remove the post
-        console.log("Removing post with id:", id); // Log the id
+        console.log("Removing post with id:", id); 
         axios.delete(`http://localhost:5001/posts/${id}`)
             .then(response => {
                 console.log('Post deleted successfully:', response.data);
-                fetchPosts(); // Fetch posts after successful deletion
-                // Remove comments associated with the deleted post
+                fetchPosts();
                 setComments(comments.filter(comment => comment.postId !== id));
             })
             .catch(error => {
@@ -77,9 +88,10 @@ function Post(props) {
     
 
     const removeComment = (id) => {
-        const newComments = comments.filter((comment) => comment.id !== id);
+        const newComments = comments.filter(comment => comment.id !== id);
         setComments(newComments);
     };
+      
 
     return (
         <div>
@@ -93,7 +105,9 @@ function Post(props) {
                         rating={item.rating}
                         tag = {item.tag}
                         removeItem={removeItem}
+                        removeComment={removeComment}
                         addComment={addComment}
+                        addReply={addReply}
                         comments={comments.filter(comment => comment.postId === item.id)}
                     />
                 ))}
