@@ -1,8 +1,8 @@
-// PostItem.js
 import React from "react";
 import heartImage from './heart.png';
 import thumbsUpImage from './thumbs-up.png';
-import CommentControl from "./CommentControl"; // Import the CommentControl component
+import CommentControl from "./CommentControl";
+import Comment from "./Comment"; 
 
 function PostItem(props) {
     console.log("PostItemCreated?", props.id)
@@ -28,20 +28,23 @@ function PostItem(props) {
             
             {/* Add CommentControl for adding comments */}
             <CommentControl addComment={props.addComment} postId={props.id} />
-
-            {/* Display comments associated with this post */}
             <div>
                 {props.comments.map(comment => (
-                    <div key={comment.id}>
-                        <p>{comment.user} - {comment.time}</p>
-                        <p>{comment.user_comment}</p>
-                    </div>
+                    <Comment
+                        key={comment.id}
+                        id={comment.id}
+                        user={comment.user}
+                        time={comment.time}
+                        user_comment={comment.user_comment}
+                        removeComment={props.removeComment} 
+                    />
                 ))}
             </div>
         </div>
     );
 }
 export default PostItem;
+
 
 
 
