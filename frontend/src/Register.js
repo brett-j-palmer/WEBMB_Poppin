@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios'; 
+import logo from './logo.svg';
+import './App.css';
+import icon from './icon.svg';
 
-function Login() {
+function Register() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
@@ -14,14 +18,15 @@ function Login() {
     setPassword(e.target.value);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (username === 'user' && password === 'pass') {
-      console.log('Login successful');
-      navigate('/Post');
-    } else {
-      console.log('Invalid credentials');
+    try {
+      await axios.post('http://localhost:5001/users/add', { username, password }); 
+      console.log('User registered successfully:', { username, password });
+      navigate('/login');
+    } catch (error) {
+      console.error('Registration failed:', error.message);
     }
 
     setUsername('');
@@ -31,8 +36,11 @@ function Login() {
   return (
     <div className="App">
       <header className="App-header">
-        <div className="Login">
-          <h2>Login Page</h2>
+        <img src={logo} className="App-logo" alt="logo" />
+        <img src={icon} className="App-icon" alt="icon" />
+
+        <div className="Register">
+          <h2>Register Page</h2>
           <form onSubmit={handleSubmit}>
             <label>
               Username:
@@ -44,10 +52,10 @@ function Login() {
               <input type="password" value={password} onChange={handlePasswordChange} />
             </label>
             <br />
-            <button type="submit">Login</button>
+            <button type="submit">Register</button>
           </form>
           <p>
-            Don't have an account? <Link to="/register">Register</Link>
+            Already have an account? <Link to="/login">Login</Link>
           </p>
         </div>
       </header>
@@ -55,4 +63,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;
