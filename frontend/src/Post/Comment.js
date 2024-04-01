@@ -23,7 +23,7 @@ function Comment({ id, user, time, commentText, removeComment, addReply }) {
   return (
     <div>
       <div style={{ fontSize: "12px", color: "#777", marginBottom: "5px" }}>
-        <span style={{ marginRight: "5px" }}>{commentText}</span>
+        <span style={{ marginRight: "5px" }}>{user}</span>
         <span>{time}</span>
       </div>
       <div>

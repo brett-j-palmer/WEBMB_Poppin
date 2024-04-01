@@ -13,8 +13,6 @@ function Post(props) {
 
     useEffect(() => {
         fetchPosts();
-        // postItems.forEach(post => fetchCommentsByPostId(post.id));
-        // setCommentsLoaded(false);
     }, []);
 
     const fetchPosts = () => {
@@ -65,6 +63,7 @@ function Post(props) {
                     time: currentTime,
                 };
             setComments([...comments, newComment]);
+            fetchCommentsByPostId(commentData.postId);
         }
     } catch (error) {
         console.error('Error adding comment from postjs:', error);
@@ -84,13 +83,19 @@ function Post(props) {
       };
     
     const fetchCommentsByPostId = async (postId) => {
-        console.log("It's coming to this point")
     try {
         const response = await axios.get(`http://localhost:5001/comments/byPostId/${postId}`);
-        console.log("w",response.data)
-        setComments(existingComments => [...existingComments, ...response.data]);
-        // setComments(response.data);
+        // setComments(existingComments => [...existingComments, ...response.data]);
+        const formattedComments = response.data.map(comment => ({
+            id: comment._id,
+            postId: comment.postId,
+            user: comment.user || 'User', // Use 'User' if user is not provided
+            text: comment.commentText,
+            time: new Date(comment.createdAt).toLocaleString(), // Assuming createdAt is a date string
+          }));
+        setComments(existingComments => [...existingComments, ...formattedComments]);
         setCommentsLoaded(true);
+
     } catch (error) {
         console.error('Error fetching comments:', error);
     }
@@ -131,9 +136,7 @@ function Post(props) {
                         removeComment={removeComment}
                         addComment={addComment}
                         addReply={addReply}
-                        comments={comments}
-                        // comments={comments.filter(comment => comment.postId === item.id)}
-                        // fetchCommentsByPostId={() => fetchCommentsByPostId(item.id)}
+                        comments={comments.filter(comment => comment.postId === item.id)}
                     />
                 ))}
             </ul>
