@@ -14,7 +14,7 @@ router.route('/add').post((req, res) => {
 
     newPost.save()
       .then(() => res.json('Post added!'))
-      .catch(err => res.status(400).json('Error: ' + err));
+      .catch(err => res.status(400).json('Error 1: ' + err));
 });
 
 router.route('/:id').delete((req, res) => {

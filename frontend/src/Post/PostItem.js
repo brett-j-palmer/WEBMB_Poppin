@@ -5,7 +5,7 @@ import CommentControl from "./CommentControl";
 import Comment from "./Comment"; 
 
 function PostItem(props) {
-    console.log("PostItemCreated?", props.id)
+    // console.log("PostItemCreated?", props.id)
     const [liked, setLiked] = React.useState(false);
 
     const toggleLike = () => {
@@ -26,28 +26,23 @@ function PostItem(props) {
                 console.log(props.id)
                 props.removeItem(props.id)}}>Remove Post</button>
             
-            {/* Add CommentControl for adding comments */}
+            
             <CommentControl addComment={props.addComment} postId={props.id} />
             <div>
                 {props.comments.map(comment => (
                     <Comment
-                        key={comment.id}
+                        key={`${props.id}-${comment.id}`}
                         id={comment.id}
                         user={comment.user}
                         time={comment.time}
-                        user_comment={comment.user_comment}
-                        removeComment={props.removeComment} 
+                        commentText={comment.text}
+                        removeComment={props.removeComment}
+                        addReply={props.addReply} 
                     />
                 ))}
             </div>
+
         </div>
     );
 }
 export default PostItem;
-
-
-
-
-
-
-

@@ -9,9 +9,12 @@ function Post(props) {
     const [postItems, setPostItems] = useState([]);
     const [comments, setComments] = useState([]);
     const [showComments, setShowComments] = useState(false);
+    const [commentsLoaded, setCommentsLoaded] = useState(false);
 
     useEffect(() => {
         fetchPosts();
+        // postItems.forEach(post => fetchCommentsByPostId(post.id));
+        // setCommentsLoaded(false);
     }, []);
 
     const fetchPosts = () => {
@@ -24,7 +27,12 @@ function Post(props) {
                     caption: post.caption,
                     rating: post.rating
                 }));
-                setPostItems(postsWithIds); // Update the state with fetched posts
+                setPostItems(postsWithIds); 
+
+                postsWithIds.forEach(post => {
+                    fetchCommentsByPostId(post.id);
+                });
+                // setCommentsLoaded(true);
             })
             .catch(error => {
                 console.error('Error fetching posts:', error);
@@ -32,10 +40,10 @@ function Post(props) {
     };
 
     const addItem = (postData) => {
-        axios.post('http://localhost:5001/posts/add', postData) // Send post data directly
+        axios.post('http://localhost:5001/posts/add', postData) 
             .then(response => {
                 console.log('Post added successfully:', response.data);
-                fetchPosts(); // Fetch posts after successful addition
+                fetchPosts(); 
             })
             .catch(error => {
                 console.error('Error adding post:', error);
@@ -43,18 +51,24 @@ function Post(props) {
             setShowComments(true);
     };
 
-    const addComment = (postId, user_comment) => {
-        if (user_comment) {
-            const currentTime = new Date().toLocaleString();
-            const newComment = {
-                id: Date.now(), // Use current timestamp as a unique id
-                postId: postId,
-                user: "User",
-                user_comment: user_comment,
-                time: currentTime,
-            };
+    const addComment = async (commentData) => {
+        try {
+            const response = await axios.post('http://localhost:5001/comments/add', commentData);
+            console.log('comment added successfully:', response.data);
+            if (commentData.commentText) {
+                const currentTime = new Date().toLocaleString();
+                const newComment = {
+                    id: response.data.commentId, 
+                    postId: commentData.postId,
+                    user: "User",
+                    text: commentData.commentText,
+                    time: currentTime,
+                };
             setComments([...comments, newComment]);
         }
+    } catch (error) {
+        console.error('Error adding comment from postjs:', error);
+      }
     };
     const addReply = (commentId, replyText) => {
         const updatedComments = comments.map(comment => {
@@ -69,7 +83,18 @@ function Post(props) {
         setComments(updatedComments);
       };
     
-    
+    const fetchCommentsByPostId = async (postId) => {
+        console.log("It's coming to this point")
+    try {
+        const response = await axios.get(`http://localhost:5001/comments/byPostId/${postId}`);
+        console.log("w",response.data)
+        setComments(existingComments => [...existingComments, ...response.data]);
+        // setComments(response.data);
+        setCommentsLoaded(true);
+    } catch (error) {
+        console.error('Error fetching comments:', error);
+    }
+    };
 
     const removeItem = (id) => {
         // Remove the post
@@ -91,9 +116,9 @@ function Post(props) {
         setComments(newComments);
     };
       
-
     return (
         <div>
+            {commentsLoaded ? (
             <ul>
                 {postItems.map(item => (
                     <PostItem
@@ -106,10 +131,15 @@ function Post(props) {
                         removeComment={removeComment}
                         addComment={addComment}
                         addReply={addReply}
-                        comments={comments.filter(comment => comment.postId === item.id)}
+                        comments={comments}
+                        // comments={comments.filter(comment => comment.postId === item.id)}
+                        // fetchCommentsByPostId={() => fetchCommentsByPostId(item.id)}
                     />
                 ))}
             </ul>
+            ):(
+                <p>Loading comments...</p>
+            )}
             <PostControl addItem={addItem} />
         </div>
     );

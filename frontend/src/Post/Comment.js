@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Comment({ id, user, time, user_comment, removeComment, addReply }) {
+function Comment({ id, user, time, commentText, removeComment, addReply }) {
   const [replyText, setReplyText] = useState("");
   const [showReplyForm, setShowReplyForm] = useState(false);
 
@@ -10,24 +10,24 @@ function Comment({ id, user, time, user_comment, removeComment, addReply }) {
 
   const handleReplySubmit = () => {
     if (replyText.trim() !== "") {
-      addReply(id, replyText); // Pass comment id along with reply text
+      addReply(id, replyText); 
       setReplyText("");
-      setShowReplyForm(false); // Hide reply form after submission
+      setShowReplyForm(false); 
     }
   };
 
   const toggleReplyForm = () => {
     setShowReplyForm(!showReplyForm);
   };
-
+  console.log("t",commentText,id,time)
   return (
     <div>
       <div style={{ fontSize: "12px", color: "#777", marginBottom: "5px" }}>
-        <span style={{ marginRight: "5px" }}>{user}</span>
+        <span style={{ marginRight: "5px" }}>{commentText}</span>
         <span>{time}</span>
       </div>
       <div>
-        <p style={{ fontSize: "15", margin: "0" }}>{user_comment}</p>
+        <p style={{ fontSize: "15", margin: "0" }}>{commentText}</p>
         <button onClick={() => removeComment(id)}>Delete</button>
         <button onClick={toggleReplyForm}>Reply</button>
         {showReplyForm && (

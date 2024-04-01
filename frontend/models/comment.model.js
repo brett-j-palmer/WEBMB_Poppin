@@ -6,20 +6,20 @@ const commentSchema = new Schema({
     postId: {
         type: Schema.Types.ObjectId,
         ref: 'Post',
-        required: true
+        required: false
     },
     user: {
         type: String,
-        required: true
+        required: false
     },
-    text: {
+    commentText: {
         type: String,
-        required: true
+        required: false
     },
     createdAt: {
         type: Date,
         default: Date.now
-    }
+      }
 });
 
 const Comment = mongoose.model('Comment', commentSchema);
