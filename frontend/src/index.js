@@ -6,6 +6,7 @@ import App from './App';
 import Register from './Register';
 import Login from './Login';
 import Post from './Post/Post';
+import ProfilePage from './ProfilePage';
 import reportWebVitals from './reportWebVitals';
 
 ReactDOM.render(
@@ -15,6 +16,7 @@ ReactDOM.render(
       <Route path="/login" element={<Login />} />
       <Route path="/post" element={<App />} />
       <Route path="/" element={<Register />} />
+      <Route path="/profile" element={<ProfilePage />} />
     </Routes>
   </Router>,
   document.getElementById('root')
