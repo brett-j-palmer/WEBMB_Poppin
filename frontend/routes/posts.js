@@ -8,9 +8,9 @@ router.route('/').get((req, res) => {
   });
 
 router.route('/add').post((req, res) => {
-    const { text, file, caption, rating, tag } = req.body;
+    const { username, file, caption, rating, tag } = req.body;
 
-    const newPost = new Post({ text, file, caption, rating, tag });
+    const newPost = new Post({ username, file, caption, rating, tag });
 
     newPost.save()
       .then(() => res.json('Post added!'))
