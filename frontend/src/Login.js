@@ -21,7 +21,7 @@ function Login() {
     try {
       const response = await axios.post('http://localhost:5001/users/login', { username, password });
       console.log('Login successful:', response.data);
-      navigate('/Post');
+      navigate('/Post', {state: { username: username}});
     } catch (error) {
       console.error('Login failed:', error.message);
     }

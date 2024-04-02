@@ -9,6 +9,8 @@ function PostControl(props) {
     const [caption, setCaption] = React.useState("");
     const [rating, setRating] = React.useState("");
     const [tag, setTag] = React.useState("");
+    const[username, setUsername] = React.useState(props.username);
+
 
     const onChange = e => {
         setText(e.target.value);
@@ -16,7 +18,11 @@ function PostControl(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-        props.addItem({ text, file, caption, rating, tag });
+
+        console.log("Username",username)
+        console.log(caption)
+        
+        props.addItem({ username, text, file, caption, rating, tag });
         setText("");
         setCaption("");
         setRating("");

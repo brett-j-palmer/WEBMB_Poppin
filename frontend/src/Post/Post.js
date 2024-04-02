@@ -2,18 +2,22 @@ import React, { useState, useEffect, useCallback } from "react";
 import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 import axios from 'axios';
+import { useLocation } from 'react-router-dom';
 
 function Post(props) {
     const [postItems, setPostItems] = useState([]);
     const [comments, setComments] = useState([]);
     const [commentsLoaded, setCommentsLoaded] = useState(false); 
     const [setShowComments] = useState(false); 
+    const {state} = useLocation();
+    const { username: myusername} = state;
 
     const fetchPosts = useCallback(() => {
         axios.get('http://localhost:5001/posts')
             .then(response => {
                 const postsWithIds = response.data.map(post => ({
                     id: post._id,
+                    username: post.username,
                     file: post.file,
                     caption: post.caption,
                     rating: post.rating,
@@ -142,6 +146,7 @@ function Post(props) {
                     <PostItem
                         key={item.id}
                         id={item.id}
+                        username={item.username}
                         file={item.file}
                         caption={item.caption}
                         rating={item.rating}
@@ -157,7 +162,7 @@ function Post(props) {
             ):(
                 <p>Loading...</p> 
             )}
-            <PostControl addItem={addItem} />
+            <PostControl addItem={addItem} username={myusername} />
         </div>
     );
 }

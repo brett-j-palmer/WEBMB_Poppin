@@ -12,9 +12,9 @@ function PostItem(props) {
     };
 
     return (
-        // props.text field can be used for a title if uncommented
         // border radius, can be used to change the shape of corners
         <div style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+            {props.username} <br />
             <img src={props.file} width={450} alt="" /> <br />
             {props.caption} <br />
             {props.rating}/10 <br />
