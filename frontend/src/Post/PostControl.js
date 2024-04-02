@@ -37,7 +37,6 @@ function PostControl(props) {
         }
     }
 
-
     return (
         <form onSubmit={handleSubmit}>
             {/* <input type="text" name="text" value={text} onChange={onChange} data-testid="new_item_text" placeholder="Enter Text Here..." /> */}

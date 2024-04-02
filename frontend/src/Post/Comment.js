@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Comment({ id, user, time, commentText, removeComment, addReply }) {
+function Comment({ id, user, time, commentText, removeComment, addReply, replies }) {
   const [replyText, setReplyText] = useState("");
   const [showReplyForm, setShowReplyForm] = useState(false);
 
@@ -19,7 +19,7 @@ function Comment({ id, user, time, commentText, removeComment, addReply }) {
   const toggleReplyForm = () => {
     setShowReplyForm(!showReplyForm);
   };
-  console.log("t",commentText,id,time)
+
   return (
     <div>
       <div style={{ fontSize: "12px", color: "#777", marginBottom: "5px" }}>
@@ -27,7 +27,7 @@ function Comment({ id, user, time, commentText, removeComment, addReply }) {
         <span>{time}</span>
       </div>
       <div>
-        <p style={{ fontSize: "15", margin: "0" }}>{commentText}</p>
+        <p style={{ fontSize: "15px", margin: "0" }}>{commentText}</p>
         <button onClick={() => removeComment(id)}>Delete</button>
         <button onClick={toggleReplyForm}>Reply</button>
         {showReplyForm && (
@@ -41,12 +41,24 @@ function Comment({ id, user, time, commentText, removeComment, addReply }) {
             <button onClick={handleReplySubmit}>Submit</button>
           </div>
         )}
+        <div>
+          {replies && replies.map(reply => (
+            <div key={reply.id}>
+              <p>{reply.user}: {reply.text}</p>
+              <p>{reply.time}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export default Comment;
+
+
+
+
 
 
 

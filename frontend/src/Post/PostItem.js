@@ -5,7 +5,6 @@ import CommentControl from "./CommentControl";
 import Comment from "./Comment"; 
 
 function PostItem(props) {
-    // console.log("PostItemCreated?", props.id)
     const [liked, setLiked] = React.useState(false);
 
     const toggleLike = () => {
