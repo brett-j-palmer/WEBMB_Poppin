@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Comment({ id, user, time, user_comment, removeComment, addReply }) {
+function Comment({ id, user, time, commentText, removeComment, addReply, replies }) {
   const [replyText, setReplyText] = useState("");
   const [showReplyForm, setShowReplyForm] = useState(false);
 
@@ -10,9 +10,9 @@ function Comment({ id, user, time, user_comment, removeComment, addReply }) {
 
   const handleReplySubmit = () => {
     if (replyText.trim() !== "") {
-      addReply(id, replyText); // Pass comment id along with reply text
+      addReply(id, replyText); 
       setReplyText("");
-      setShowReplyForm(false); // Hide reply form after submission
+      setShowReplyForm(false); 
     }
   };
 
@@ -27,7 +27,7 @@ function Comment({ id, user, time, user_comment, removeComment, addReply }) {
         <span>{time}</span>
       </div>
       <div>
-        <p style={{ fontSize: "15", margin: "0" }}>{user_comment}</p>
+        <p style={{ fontSize: "15px", margin: "0" }}>{commentText}</p>
         <button onClick={() => removeComment(id)}>Delete</button>
         <button onClick={toggleReplyForm}>Reply</button>
         {showReplyForm && (
@@ -41,12 +41,24 @@ function Comment({ id, user, time, user_comment, removeComment, addReply }) {
             <button onClick={handleReplySubmit}>Submit</button>
           </div>
         )}
+        <div>
+          {replies && replies.map(reply => (
+            <div key={reply.id}>
+              <p>{reply.user}: {reply.text}</p>
+              <p>{reply.time}</p>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 }
 
 export default Comment;
+
+
+
+
 
 
 

@@ -9,7 +9,7 @@ function CommentControl({ addComment, postId }) {
 
     const handleSubmitComment = () => {
         if (commentText.trim() !== "") {
-            addComment(postId, commentText); // Pass postId along with comment text
+            addComment({postId, commentText,}); 
             setCommentText("");
         }
     };
