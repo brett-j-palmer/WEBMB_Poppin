@@ -1,23 +1,22 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect } from 'react';
 import './ProfilePage.css'; 
 import './App.css';
 import profilePicture from './Post/heart.png'; 
 import PostItem from './Post/PostItem';
 import axios from 'axios';
-
-
+import { useUser } from './UserContext'; 
 function ProfilePage() {
-  const username = "Brett Palmer";
-  const bio = "I am Brett Palmer. I love coding and coffee and Poppin.";
+  const { username } = useUser(); 
+  const bio = `I am ${username}. I love coding and coffee and Poppin.`; 
 
   const[selectedPost, setSelectedPost] = useState(null);
   const[posts, setPosts] = useState([]);
   
   useEffect(()=> {
-    const fetchData = async() => {
-      try{
+    const fetchData = async () => {
+      try {
         await fetchPosts();
-      } catch(error){
+      } catch(error) {
         console.error('Error fetching posts', error);
       }
     };
@@ -25,7 +24,7 @@ function ProfilePage() {
   }, []);
 
   const fetchPosts = async () => {
-    try{
+    try {
       const response = await axios.get('http://localhost:5001/posts');
       const postwithIDS = response.data.map(post => ({
         id: post._id,
@@ -48,8 +47,7 @@ function ProfilePage() {
     console.log(postID);
     const post = posts.find(post => post.id === postID);
     console.log(":", post);
-    setSelectedPost(post||null);
-
+    setSelectedPost(post || null);
   };
 
   return (
@@ -64,7 +62,7 @@ function ProfilePage() {
           <h3>Select a Post:</h3>
           <select onChange={e => handlePostSelection(e.target.value)}>
             <option value="">Select a post...</option>
-            {posts.length> 0 && posts.map(post => (
+            {posts.length > 0 && posts.map(post => (
               <option key={post.id} value={post.id}>{post.caption}</option>
             ))}
           </select>

@@ -11,7 +11,6 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <img src={icon} className="App-icon" alt="icon" />
-        {/* Add a Link to the profile page here */}
         <nav>
           <Link to="/profile" style={{ color: '#761c47', textDecoration: 'none' }}>Go to Profile</Link>
         </nav>
