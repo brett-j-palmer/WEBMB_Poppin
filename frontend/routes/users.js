@@ -10,8 +10,9 @@ router.route('/').get((req, res) => {
 router.route('/add').post((req, res) => {
   const username = req.body.username;
   const password = req.body.password;
+  const defaultBio = "This is a default bio.";
 
-  const newUser = new User({ username, password });
+  const newUser = new User({ username, password, bio : defaultBio });
 
   newUser.save()
     .then(() => res.json('User added!'))
