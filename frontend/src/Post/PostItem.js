@@ -1,23 +1,66 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import heartImage from './heart.png';
 import thumbsUpImage from './thumbs-up.png';
 import defaultImage from './default_image.png';
 import CommentControl from "./CommentControl";
 import Comment from "./Comment"; 
 import { useUser } from '../UserContext'; 
-
+import axios from 'axios';
 
 function PostItem(props) {
     const [liked, setLiked] = React.useState(false);
     const { username } = useUser(); 
 
+    useEffect(() => {
+        axios.get("http://localhost:5001/users/username/" + username)
+            .then(response => {
+                const user = response.data;
+                if (user && user.liked_posts.includes(props.id)) {
+                    setLiked(true);
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching user data:', error);
+            });
+    }, [username, props.id]);
+
+
+
     const toggleLike = () => {
         setLiked(!liked);
+        console.log("Liking post with id:", props.id); 
+        axios.get("http://localhost:5001/users/username/" + username)
+            .then(response => {
+                var user = response.data;
+
+                if (!liked) {
+                    user.liked_posts.push(props.id);
+                } else {
+                    var index = user.liked_posts.indexOf(props.id);
+                    if (index > -1) {
+                        user.liked_posts.splice(index, 1);
+                    }
+                }
+
+                axios.put("http://localhost:5001/users/" + user._id, user)
+                .then(response => {
+                    console.log("Post Liked Sucessfully");
+                })
+                .catch(error => {
+                    console.log("Error,", error);
+    
+                });
+                
+            })            
+            .catch(error => {
+                console.error('Error liking post:', error)
+            })
     };
 
     const handleImageError = (event) => {
         event.target.src = defaultImage;
     };
+
 
     return (
         // border radius, can be used to change the shape of corners

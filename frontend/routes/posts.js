@@ -13,10 +13,9 @@ router.route('/add').post((req, res) => {
     const newPost = new Post({ username, file, caption, rating, tag });
 
     newPost.save()
-      .then(() => res.json('Post added!'))
+      .then((post) => res.json({ postId: post._id }))
       .catch(err => res.status(400).json('Error 1: ' + err));
 });
-
 router.route('/:id').delete((req, res) => {
     Post.findByIdAndDelete(req.params.id)
       .then(() => res.json('Post deleted.'))
