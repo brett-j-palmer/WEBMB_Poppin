@@ -43,6 +43,29 @@ function Post(props) {
         axios.post('http://localhost:5001/posts/add', postData) 
             .then(response => {
                 console.log('Post added successfully:', response.data);
+                var postID = response.data.postId;
+                console.log("PostID", postID)
+
+                axios.get("http://localhost:5001/users/username/" + myusername)
+                .then(response => {
+                    var user = response.data;
+    
+                    user.created_posts.push(postID);
+    
+                    axios.put("http://localhost:5001/users/" + user._id, user)
+                    .then(response => {
+                        console.log("Post Created Sucessfully");
+                    })
+                    .catch(error => {
+                        console.log("Error,", error);
+        
+                    });
+                    
+                })            
+                .catch(error => {
+                    console.error('Error creating post:', error)
+                })
+
                 fetchPosts(); 
             })
             .catch(error => {
@@ -124,6 +147,28 @@ function Post(props) {
             .catch(error => {
                 console.error('Error deleting post:', error);
             });
+
+
+            axios.get("http://localhost:5001/users/username/" + myusername)
+            .then(response => {
+                var user = response.data;
+
+                var index = user.created_posts.indexOf(id);
+                if (index > -1) {
+                    user.created_posts.splice(index, 1);
+                }
+
+                axios.put("http://localhost:5001/users/" + user._id, user)
+                .then(response => {
+                    console.log("Post Removed Sucessfully");
+                })
+                .catch(error => {
+                    console.log("Error,", error);
+                });
+            })            
+            .catch(error => {
+                console.error('Error liking post:', error)
+            })
     };
 
     const removeComment = async (commentId) => {
