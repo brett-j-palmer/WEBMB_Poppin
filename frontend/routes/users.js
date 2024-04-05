@@ -11,12 +11,41 @@ router.route('/add').post((req, res) => {
   const username = req.body.username;
   const password = req.body.password;
   const defaultBio = "This is a default bio.";
+  const liked_posts = [];
+  const created_posts = [];
 
-  const newUser = new User({ username, password, bio : defaultBio });
+  const newUser = new User({ username, password, bio : defaultBio, liked_posts, created_posts });
 
   newUser.save()
     .then(() => res.json('User added!'))
     .catch(err => res.status(400).json('Error: ' + err));
+});
+
+router.route('/:id').put((req, res) => {
+  const userId = req.params.id;
+  const newData = req.body;
+
+  User.findByIdAndUpdate(userId, newData, { new: true })
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json({ message: 'User updated successfully', user });
+    })
+    .catch(err => res.status(400).json({ message: 'Error: ' + err }));
+});
+
+router.route('/username/:username').get((req, res) => {
+  const username = req.params.username;
+
+  User.findOne({ username })
+    .then(user => {
+      if (!user) {
+        return res.status(404).json({ message: 'User not found' });
+      }
+      res.json(user);
+    })
+    .catch(err => res.status(400).json({ message: 'Error: ' + err }));
 });
 
 router.route('/login').post(async (req, res) => {
