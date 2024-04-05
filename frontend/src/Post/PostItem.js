@@ -1,19 +1,19 @@
-import React, {useState, useEffect} from "react";
+import React,{useEffect} from "react";
 import heartImage from './heart.png';
 import thumbsUpImage from './thumbs-up.png';
 import defaultImage from './default_image.png';
 import CommentControl from "./CommentControl";
-import Comment from "./Comment"; 
-import { useUser } from '../UserContext'; 
+import Comment from "./Comment";
+import { useUser } from '../UserContext';
 import axios from 'axios';
 
 function PostItem(props) {
     const [liked, setLiked] = React.useState(false);
-    const { username: loggedInUsername } = useUser(); 
+    const { username: loggedInUsername } = useUser();
     const [isFollowing, setIsFollowing] = React.useState(false);
 
     useEffect(() => {
-        axios.get("http://localhost:5001/users/username/" + username)
+        axios.get("http://localhost:5001/users/username/" + loggedInUsername)
             .then(response => {
                 const user = response.data;
                 if (user && user.liked_posts.includes(props.id)) {
@@ -23,17 +23,14 @@ function PostItem(props) {
             .catch(error => {
                 console.error('Error fetching user data:', error);
             });
-    }, [username, props.id]);
-
-
+    }, [loggedInUsername, props.id]);
 
     const toggleLike = () => {
         setLiked(!liked);
-        console.log("Liking post with id:", props.id); 
-        axios.get("http://localhost:5001/users/username/" + username)
+        console.log("Liking post with id:", props.id);
+        axios.get("http://localhost:5001/users/username/" + loggedInUsername)
             .then(response => {
                 var user = response.data;
-
                 if (!liked) {
                     user.liked_posts.push(props.id);
                 } else {
@@ -42,17 +39,14 @@ function PostItem(props) {
                         user.liked_posts.splice(index, 1);
                     }
                 }
-
                 axios.put("http://localhost:5001/users/" + user._id, user)
-                .then(response => {
-                    console.log("Post Liked Sucessfully");
-                })
-                .catch(error => {
-                    console.log("Error,", error);
-    
-                });
-                
-            })            
+                    .then(response => {
+                        console.log("Post Liked Sucessfully");
+                    })
+                    .catch(error => {
+                        console.log("Error,", error);
+                    });
+            })
             .catch(error => {
                 console.error('Error liking post:', error)
             })
@@ -61,7 +55,6 @@ function PostItem(props) {
     const handleImageError = (event) => {
         event.target.src = defaultImage;
     };
-
 
     const toggleFollow = () => {
         setIsFollowing(!isFollowing);
@@ -98,7 +91,7 @@ function PostItem(props) {
                         time={comment.time}
                         commentText={comment.text}
                         removeComment={props.removeComment}
-                        addReply={props.addReply} 
+                        addReply={props.addReply}
                     />
                 ))}
             </div>
