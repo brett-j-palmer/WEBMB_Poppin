@@ -25,8 +25,14 @@ function ProfilePage() {
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get('http://localhost:5001/posts');
-      const postwithIDS = response.data.map(post => ({
+      const response = await axios.get('http://localhost:5001/users/created_posts/${username}');
+      const user = response.data;
+      const createdpostID = user.created_posts;
+
+      const postsResponse = await axios.get('http://localhost:5001/posts')
+      const postData = postsResponse.data.filter(post => createdpostID.includes(post._id));
+
+      const postwithIDS = postData.map(post => ({
         id: post._id,
         username: post.username,
         file: post.file,
