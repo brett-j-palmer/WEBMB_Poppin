@@ -41,3 +41,15 @@
     width: 100%;
   }
   
+  .post-selections {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px; 
+  }
+  
+  .post-selection {
+    background-color: #fff;
+    padding: 60px; 
+    border-radius: 10px; 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+  }
