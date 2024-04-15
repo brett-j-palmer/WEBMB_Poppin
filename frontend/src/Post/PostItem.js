@@ -6,6 +6,7 @@ import CommentControl from "./CommentControl";
 import Comment from "./Comment";
 import { useUser } from '../UserContext';
 import axios from 'axios';
+import './PostItem.css';
 
 function PostItem(props) {
     const [liked, setLiked] = React.useState(false);
@@ -61,27 +62,36 @@ function PostItem(props) {
     };
 
     return (
-         // border radius, can be used to change the shape of corners
-        <div style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+       <div className="post-item">
             <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
                 <div style={{ flex: "1", textAlign: "center" }}>
                     <p>Posted by: {props.username}</p>
+                    <p>
                     <button onClick={toggleFollow} style={{ marginTop: "2px" }}>
                         {isFollowing ? "Unfollow" : "Follow"}
                     </button>
+                    </p>
                 </div>
             </div>
+            <p>
             <img src={props.file} width={450} onError={handleImageError} alt="" />
+            </p>
             <p>{props.caption}</p>
-            <p>{props.rating}/10</p>
-            <p>#{props.tag}</p>
+            <p>{props.rating}/10
+            #{props.tag}</p>
+            <p>
             <button onClick={toggleLike}>
                 <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
             </button>
+            </p>
+            <p>
             {loggedInUsername === props.username && (
                 <button onClick={() => props.removeItem(props.id)}>Remove Post</button>
             )}
+            </p>
+            <p>
             <CommentControl addComment={props.addComment} postId={props.id} />
+            </p>
             <div>
                 {props.comments.map(comment => (
                     <Comment
