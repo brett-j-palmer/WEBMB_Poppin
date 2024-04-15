@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Add this line
+import axios from 'axios';
+import { useUser } from './UserContext'; 
 
 function Login() {
-  const [username, setUsername] = useState('');
+  const [localUsername, setLocalUsername] = useState(''); 
   const [password, setPassword] = useState('');
   const navigate = useNavigate();
+  const { setUsername } = useUser(); 
 
   const handleUsernameChange = (e) => {
-    setUsername(e.target.value);
+    setLocalUsername(e.target.value);
   };
 
   const handlePasswordChange = (e) => {
@@ -17,16 +19,16 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     try {
-      const response = await axios.post('http://localhost:5001/users/login', { username, password });
+      const response = await axios.post('http://localhost:5001/users/login', { username: localUsername, password });
       console.log('Login successful:', response.data);
-      navigate('/Post');
+      setUsername(localUsername); 
+      navigate('/Post', {state: { username: localUsername}});
     } catch (error) {
       console.error('Login failed:', error.message);
     }
 
-    setUsername('');
+    setLocalUsername('');
     setPassword('');
   };
 
@@ -38,7 +40,7 @@ function Login() {
           <form onSubmit={handleSubmit}>
             <label>
               Username:
-              <input type="text" value={username} onChange={handleUsernameChange} />
+              <input type="text" value={localUsername} onChange={handleUsernameChange} />
             </label>
             <br />
             <label>

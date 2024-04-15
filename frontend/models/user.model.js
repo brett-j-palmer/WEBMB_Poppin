@@ -13,6 +13,18 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: true
+  },
+  bio: {
+    type: String,
+    required: true
+  },
+  liked_posts:{
+    type: Array,
+    required: true
+  },
+  created_posts:{
+    type: Array,
+    required: true
   }
 }, {
   timestamps: true,

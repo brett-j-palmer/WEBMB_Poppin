@@ -8,15 +8,14 @@ router.route('/').get((req, res) => {
   });
 
 router.route('/add').post((req, res) => {
-    const { text, file, caption, rating, tag } = req.body;
+    const { username, file, caption, rating, tag } = req.body;
 
-    const newPost = new Post({ text, file, caption, rating, tag });
+    const newPost = new Post({ username, file, caption, rating, tag });
 
     newPost.save()
-      .then(() => res.json('Post added!'))
-      .catch(err => res.status(400).json('Error: ' + err));
+      .then((post) => res.json({ postId: post._id }))
+      .catch(err => res.status(400).json('Error 1: ' + err));
 });
-
 router.route('/:id').delete((req, res) => {
     Post.findByIdAndDelete(req.params.id)
       .then(() => res.json('Post deleted.'))
