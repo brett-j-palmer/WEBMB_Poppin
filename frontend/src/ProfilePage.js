@@ -5,10 +5,11 @@ import profilePicture from './Post/heart.png';
 import PostItem from './Post/PostItem';
 import axios from 'axios';
 import { useUser } from './UserContext'; 
+
 function ProfilePage() {
   const { username } = useUser(); 
-  const bio = `I am ${username}. I love coding and coffee and Poppin.`; 
-
+  const [editableBio, setEditableBio] = useState('');
+  const [isEditing, setIsEditing] = useState(false);
   const[selectedPost, setSelectedPost] = useState({
     box1: null,
     box2: null,
@@ -28,7 +29,16 @@ function ProfilePage() {
         console.error('Error fetching data', error);
       }
     };
+
     fetchData();
+    const fetchUserBio = async () => {
+      try {
+        await fetchUserBio();
+      } catch(error) {
+        console.error('Error fetching bio', error);
+      }
+    };
+    fetchUserBio();
   }, []);
 
   const fetchPosts = async () => {
@@ -62,6 +72,36 @@ function ProfilePage() {
     }
   };
 
+  const fetchUserBio = async () => {
+    try {
+      const response = await axios.get(`http://localhost:5001/users/username/${username}`);
+      setEditableBio(response.data.bio || `I am ${username}. I love coding and coffee and Poppin.`);
+    } catch (error) {
+      console.error('Error fetching user bio:', error);
+    }
+  };
+
+  const handleBioChange = (event) => {
+    setEditableBio(event.target.value);
+  };
+
+  const toggleEdit = () => {
+    setIsEditing(true); // Switch to edit mode
+  };
+
+  const saveBio = async () => {
+    console.log("Saving bio:", editableBio);  // Check what is being saved
+    try {
+        const response = await axios.patch(`http://localhost:5001/users/updateBio/${username}`, { bio: editableBio });
+        console.log("Response from save:", response);  // Inspect the response
+        setIsEditing(false);
+    } catch (error) {
+        console.error('Error updating bio:', error);
+    }
+};
+
+
+
   
   const handlePostSelection = (index, postID) => {
     setSelectedPost(prevState => {
@@ -77,8 +117,18 @@ function ProfilePage() {
         <div className="profile-header">
           <img src={profilePicture} className="profile-picture" alt=""/>
           <h2>{username}</h2>
+          {isEditing ? (
+            <>
+              <textarea value={editableBio} onChange={handleBioChange} />
+              <button onClick={saveBio}>Save Bio</button>
+            </>
+          ) : (
+            <>
+              <p className="profile-bio">{editableBio}</p>
+              <button onClick={toggleEdit}>Edit Bio</button>
+            </>
+          )}
         </div>
-        <p className="profile-bio">{bio}</p>
         <div className="post-selections">
           {[1,2,3,4].map(box => (
             <div key={box} className = "post-selection">

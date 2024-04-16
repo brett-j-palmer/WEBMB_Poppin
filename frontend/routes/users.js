@@ -63,4 +63,19 @@ router.route('/login').post(async (req, res) => {
   }
 });
 
+router.patch('/updateBio/:username', async (req, res) => {
+  const { username } = req.params;
+  const { bio } = req.body;
+
+  try {
+    const updatedUser = await User.findOneAndUpdate({ username: username }, { bio: bio }, { new: true });
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ message: 'Bio updated successfully', user: updatedUser });
+  } catch (error) {
+    res.status(500).json({ message: 'Error updating user bio', error });
+  }
+});
+
 module.exports = router;
