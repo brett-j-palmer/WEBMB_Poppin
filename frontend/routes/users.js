@@ -11,13 +11,14 @@ router.route('/add').post(async (req, res) => {
   const defaultBio = "This is a default bio.";
   const liked_posts = [];
   const created_posts = [];
+  const followed_users = [];
 
   try {
     const existingUser = await User.findOne({ username: username.trim() });
     if (existingUser) {
       return res.status(409).json({ message: 'Username is already taken' }); 
     }
-
+    
     const newUser = new User({ username, password, bio: defaultBio, liked_posts, created_posts });
     await newUser.save();
     res.json({ message: 'User added!' }); 
@@ -29,9 +30,9 @@ router.route('/add').post(async (req, res) => {
 
 router.route('/:id').put((req, res) => {
   const userId = req.params.id;
-  const newData = req.body;
+  const { liked_posts, followed_users } = req.body;
 
-  User.findByIdAndUpdate(userId, newData, { new: true })
+  User.findByIdAndUpdate(userId, { liked_posts, followed_users }, { new: true })
     .then(user => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });

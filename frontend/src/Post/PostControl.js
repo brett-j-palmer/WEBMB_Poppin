@@ -5,7 +5,7 @@ import Tag from "../caption&rating&tag/Tag";
 
 function PostControl(props) {
     const [text, setText] = React.useState("");
-    const [file, setFile] = React.useState();
+    const [file, setFile] = React.useState("");
     const [caption, setCaption] = React.useState("");
     const [rating, setRating] = React.useState("");
     const [tag, setTag] = React.useState("");
@@ -18,12 +18,13 @@ function PostControl(props) {
 
     const handleSubmit = e => {
         e.preventDefault();
-
+        console.log("File" , file)
         console.log("Username",username)
         console.log(caption)
         
         props.addItem({ username, text, file, caption, rating, tag });
         setText("");
+        setFile("");
         setCaption("");
         setRating("");
         setTag("");
@@ -41,6 +42,10 @@ function PostControl(props) {
         setTag(value);
     }
 
+    const handleFileChange = e => {
+        setFile(e.target.value);
+    }
+    /*
     function handleChange(e) {
         console.log(e.target.files);
         // Check if a file was selected
@@ -49,10 +54,11 @@ function PostControl(props) {
             setFile(URL.createObjectURL(e.target.files[0]));
         }
     }
+    */
 
     return (
         <form onSubmit={handleSubmit}>
-                <input type="file" onChange={handleChange} />
+            <input type="text" value={file} placeholder="Enter Image URL" onChange={handleFileChange} />
             <Caption value={caption} onChange={handleCaptionChange}/>
             <Rating value={rating} onChange={handleRatingChange}/>
             <Tag value={tag} onChange={handleTagChange}/>
