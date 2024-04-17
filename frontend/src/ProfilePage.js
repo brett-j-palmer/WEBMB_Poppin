@@ -1,60 +1,35 @@
 import React, { useState, useEffect } from 'react';
-import './ProfilePage.css'; 
+import './ProfilePage.css';
 import './App.css';
-import profilePicture from './Post/heart.png'; 
+import profilePicture from './Post/heart.png';
 import PostItem from './Post/PostItem';
 import axios from 'axios';
-import { useUser } from './UserContext'; 
+import { useUser } from './UserContext';
 
 function ProfilePage() {
-  const { username } = useUser(); 
+  const { username } = useUser();
   const [editableBio, setEditableBio] = useState('');
   const [isEditing, setIsEditing] = useState(false);
-  const[selectedPost, setSelectedPost] = useState({
-    box1: null,
-    box2: null,
-    box3: null,
-    box4: null
-  });
-  const[posts, setPosts] = useState(JSON.parse(localStorage.getItem('createdPosts')) || []);
-  //const[posts, setPosts] = useState([]);
-  
-  
+  const [selectedPost, setSelectedPost] = useState({});
+  const [posts, setPosts] = useState(JSON.parse(localStorage.getItem('createdPosts')) || []);
 
-  useEffect(()=> {
+  useEffect(() => {
     const fetchData = async () => {
-      try {
-        await fetchPosts();
-      } catch(error) {
-        console.error('Error fetching data', error);
-      }
+      await fetchPosts();
+      await fetchUserBio();
     };
-
     fetchData();
-    const fetchUserBio = async () => {
-      try {
-        await fetchUserBio();
-      } catch(error) {
-        console.error('Error fetching bio', error);
-      }
-    };
-    fetchUserBio();
-  }, []);
+  }, [username]); // Add username to dependency array if username can change
 
   const fetchPosts = async () => {
     try {
-      const response = await axios.get("http://localhost:5001/users/username/" + username);
-      console.log('http://localhost:5001/users/created_posts/${username}');
-      const user = response.data;
-      const createdpostID = user.created_posts;
-      console.log("Created Posts", createdpostID)
+      const response = await axios.get(`http://localhost:5001/users/username/${username}`);
+      const createdPostIDs = response.data.created_posts;
 
-    
+      const postsResponse = await axios.get('http://localhost:5001/posts');
+      const postData = postsResponse.data.filter(post => createdPostIDs.includes(post._id));
 
-      const postsResponse = await axios.get('http://localhost:5001/posts')
-      const postData = postsResponse.data.filter(post => createdpostID.includes(post._id));
-
-      const postwithIDS = postData.map(post => ({
+      const postsWithIDs = postData.map(post => ({
         id: post._id,
         username: post.username,
         file: post.file,
@@ -63,11 +38,10 @@ function ProfilePage() {
         tag: post.tag,
         comments: post.comments
       }));
-      localStorage.setItem('createdPosts', JSON.stringify(postwithIDS));
-      console.log('Fetched posts:', postwithIDS);
-      setPosts(postwithIDS);
-      
-    } catch(error) {
+
+      localStorage.setItem('createdPosts', JSON.stringify(postsWithIDs));
+      setPosts(postsWithIDs);
+    } catch (error) {
       console.error('Error fetching posts:', error);
     }
   };
@@ -75,7 +49,7 @@ function ProfilePage() {
   const fetchUserBio = async () => {
     try {
       const response = await axios.get(`http://localhost:5001/users/username/${username}`);
-      setEditableBio(response.data.bio || `I am ${username}. I love coding and coffee and Poppin.`);
+      setEditableBio(response.data.bio || `I am ${username}. I love coding and coffee.`);
     } catch (error) {
       console.error('Error fetching user bio:', error);
     }
@@ -86,79 +60,75 @@ function ProfilePage() {
   };
 
   const toggleEdit = () => {
-    setIsEditing(true); // Switch to edit mode
+    setIsEditing(true);
   };
 
   const saveBio = async () => {
-    console.log("Saving bio:", editableBio);  // Check what is being saved
     try {
-        const response = await axios.patch(`http://localhost:5001/users/updateBio/${username}`, { bio: editableBio });
-        console.log("Response from save:", response);  // Inspect the response
-        setIsEditing(false);
+      const response = await axios.patch(`http://localhost:5001/users/updateBio/${username}`, { bio: editableBio });
+      setIsEditing(false);
     } catch (error) {
-        console.error('Error updating bio:', error);
+      console.error('Error updating bio:', error);
     }
-};
+  };
 
-
-
-  
-  const handlePostSelection = (index, postID) => {
-    setSelectedPost(prevState => {
-      const newSelectedPosts = [...prevState];
-      newSelectedPosts[index] = posts.find(post => post.id === postID) || null;
-      return newSelectedPosts;
-    });
+  const handlePostSelection = (box, postID) => {
+    setSelectedPost(prevState => ({
+      ...prevState,
+      [box]: posts.find(post => post.id === postID) || null
+    }));
   };
 
   return (
     <div className="App">
       <header className="profile-container">
         <div className="profile-header">
-          <img src={profilePicture} className="profile-picture" alt=""/>
+          <img src={profilePicture} className="profile-picture" alt="" />
           <h2>{username}</h2>
-          {isEditing ? (
-            <>
-              <textarea value={editableBio} onChange={handleBioChange} />
-              <button onClick={saveBio}>Save Bio</button>
-            </>
-          ) : (
-            <>
-              <p className="profile-bio">{editableBio}</p>
-              <button onClick={toggleEdit}>Edit Bio</button>
-            </>
-          )}
         </div>
+        {isEditing ? (
+          <div className="edit-bio-group">
+            <textarea value={editableBio} onChange={handleBioChange} />
+            <button onClick={saveBio}>Save Bio</button>
+          </div>
+        ) : (
+          <div className="edit-bio-group">
+            <p className="profile-bio">{editableBio}</p>
+            <button onClick={toggleEdit}>Edit Bio</button>
+          </div>
+        )}
         <div className="post-selections">
-          {[1,2,3,4].map(box => (
-            <div key={box} className = "post-selection">
+          {[1, 2, 3, 4].map(box => (
+            <div key={box} className="post-selection">
               <h3>Select a Post:</h3>
-              <select onChange={e => handlePostSelection('box${box}', e.target.value)}>
-              <option value="">Your posts...</option>
-              {posts.length > 0 && posts.map(post => (
-                <option key={post.id} value={post.id}>{post.caption}</option>
-              ))}
-            </select>
-            {selectedPost['box${box}'] && (
-              <div className="selected-post">
-              <h3>Selected Post:</h3>
-              <PostItem
-                id={selectedPost['box${box}'].id}
-                username={selectedPost['box${box}'].username}
-                file={selectedPost['box${box}'].file}
-                caption={selectedPost['box${box}'].caption}
-                rating={selectedPost['box${box}'].rating}
-                tag={selectedPost['box${box}'].tag}
-                comments={selectedPost['box${box}'].comments}
-              />
+              <select onChange={e => handlePostSelection(`box${box}`, e.target.value)}>
+                <option value="">Your posts...</option>
+                {posts.map(post => (
+                  <option key={post.id} value={post.id}>{post.caption}</option>
+                ))}
+              </select>
+              {selectedPost[`box${box}`] && (
+                <div className="selected-post">
+                  <h3>Selected Post:</h3>
+                  <PostItem
+                    id={selectedPost[`box${box}`].id}
+                    username={selectedPost[`box${box}`].username}
+                    file={selectedPost[`box${box}`].file}
+                    caption={selectedPost[`box${box}`].caption}
+                    rating={selectedPost[`box${box}`].rating}
+                    tag={selectedPost[`box${box}`].tag}
+                    comments={selectedPost[`box${box}`].comments}
+                  />
+                </div>
+              )}
             </div>
-          )}
+          ))}
         </div>
-      ))}
+      </header>
     </div>
-  </header>
-</div>
-);
+  );
+  
+  
 }
 
 export default ProfilePage;
