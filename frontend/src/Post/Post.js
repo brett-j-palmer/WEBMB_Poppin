@@ -3,6 +3,7 @@ import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { useUser } from '../UserContext'; 
 
 function Post(props) {
     const [postItems, setPostItems] = useState([]);
@@ -11,6 +12,7 @@ function Post(props) {
     const [setShowComments] = useState(false); 
     const {state} = useLocation();
     const { username: myusername} = state;
+    const { username } = useUser();
 
     const fetchPosts = useCallback(() => {
         axios.get('http://localhost:5001/posts')
@@ -76,15 +78,18 @@ function Post(props) {
 
     const addComment = async (commentData) => {
         try {
-          const response = await axios.post('http://localhost:5001/comments/add', commentData);
-          console.log('comment added successfully:', response.data);
+            const response = await axios.post('http://localhost:5001/comments/add', {
+                ...commentData,
+                user: username,
+              });          console.log('comment added successfully:', response.data);
           fetchPosts();
       
           const currentTime = new Date().toLocaleString();
+          
           const newComment = {
             id: response.data.commentId,
             postId: commentData.postId,
-            user: "User",
+            user: username,
             text: commentData.commentText || '',
             time: currentTime,
           };

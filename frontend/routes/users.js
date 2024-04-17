@@ -13,8 +13,9 @@ router.route('/add').post((req, res) => {
   const defaultBio = "This is a default bio.";
   const liked_posts = [];
   const created_posts = [];
+  const followed_users = [];
 
-  const newUser = new User({ username, password, bio : defaultBio, liked_posts, created_posts });
+  const newUser = new User({ username, password, bio: defaultBio, liked_posts, created_posts, followed_users });
 
   newUser.save()
     .then(() => res.json('User added!'))
@@ -23,9 +24,9 @@ router.route('/add').post((req, res) => {
 
 router.route('/:id').put((req, res) => {
   const userId = req.params.id;
-  const newData = req.body;
+  const { liked_posts, followed_users } = req.body;
 
-  User.findByIdAndUpdate(userId, newData, { new: true })
+  User.findByIdAndUpdate(userId, { liked_posts, followed_users }, { new: true })
     .then(user => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });

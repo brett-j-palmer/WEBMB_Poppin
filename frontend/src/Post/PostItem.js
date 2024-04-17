@@ -10,13 +10,16 @@ import './PostItem.css';
 
 function PostItem(props) {
     const [liked, setLiked] = React.useState(false);
-    const { username: loggedInUsername } = useUser();
     const [isFollowing, setIsFollowing] = React.useState(false);
+    const { username: loggedInUsername } = useUser();
 
     useEffect(() => {
         axios.get("http://localhost:5001/users/username/" + loggedInUsername)
             .then(response => {
                 const user = response.data;
+                if (user && user.followed_users.includes(props.username)) {
+                    setIsFollowing(true);
+                }
                 if (user && user.liked_posts.includes(props.id)) {
                     setLiked(true);
                 }
@@ -24,7 +27,33 @@ function PostItem(props) {
             .catch(error => {
                 console.error('Error fetching user data:', error);
             });
-    }, [loggedInUsername, props.id]);
+    }, [loggedInUsername, props.id, props.username]);
+
+    const toggleFollow = () => {
+        setIsFollowing(!isFollowing);
+        axios.get("http://localhost:5001/users/username/" + loggedInUsername)
+            .then(response => {
+                var user = response.data;
+                if (!isFollowing) {
+                    user.followed_users.push(props.username);
+                } else {
+                    var index = user.followed_users.indexOf(props.username);
+                    if (index > -1) {
+                        user.followed_users.splice(index, 1);
+                    }
+                }
+                axios.put("http://localhost:5001/users/" + user._id, user)
+                    .then(response => {
+                        console.log("Toggle follow successful");
+                    })
+                    .catch(error => {
+                        console.log("Error:", error);
+                    });
+            })
+            .catch(error => {
+                console.error('Error following the user', error)
+            });
+    };
 
     const toggleLike = () => {
         setLiked(!liked);
@@ -57,59 +86,42 @@ function PostItem(props) {
         event.target.src = defaultImage;
     };
 
-    const toggleFollow = () => {
-        setIsFollowing(!isFollowing);
-    };
-
     return (
-       <div className="post-item">
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <div style={{ flex: "1", textAlign: "center" }}>
-                    <p>Posted by: {props.username}</p>
-                    <p>
-                    <button onClick={toggleFollow} style={{ marginTop: "2px" }}>
-                        {isFollowing ? "Unfollow" : "Follow"}
-                    </button>
-                    </p>
-                </div>
-            </div>
-            <p>
-            <img src={props.file} width={450} onError={handleImageError} alt="" />
-            </p>
-            <p>{props.caption}</p>
-            <p>{props.rating}/10
-            #{props.tag}</p>
-            <p>
-            <button onClick={toggleLike}>
-                <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
-            </button>
-            </p>
-            <p>
-            {loggedInUsername === props.username && (
-                <button onClick={() => props.removeItem(props.id)}>Remove Post</button>
-            )}
-            </p>
-            <p>
-            <CommentControl addComment={props.addComment} postId={props.id} />
-            </p>
-            <div>
-                {props.comments.map(comment => (
-                    <Comment
-                        key={`${props.id}-${comment.id}`}
-                        id={comment.id}
-                        user={comment.user}
-                        time={comment.time}
-                        commentText={comment.text}
-                        removeComment={props.removeComment}
-                        addReply={props.addReply}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-}
+      <div className="post-item" style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <p style={{ margin: 0, fontSize: "30px" }}>Posted by: {props.username}</p>
+        <button onClick={toggleFollow} style={{ marginTop: "2px", marginLeft: "10px" }}>
+            {isFollowing ? "Unfollow" : "Follow"}
+        </button>
+    </div>
+    <div style={{ marginBottom: "10px" }}> 
+        <img src={props.file} width={450} onError={handleImageError} alt="" />
+    </div>
+    <p>{props.caption}</p>
+    <p>{props.rating}/10</p>
+    <p>#{props.tag}</p>
+    <button onClick={toggleLike}>
+        <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
+    </button>
+    {loggedInUsername === props.username && (
+        <button onClick={() => props.removeItem(props.id)}>Remove Post</button>
+    )}
+    <CommentControl addComment={props.addComment} postId={props.id} />
+    <div>
+        {props.comments.map(comment => (
+            <Comment
+                key={`${props.id}-${comment.id}`}
+                id={comment.id}
+                user={comment.user}
+                time={comment.time}
+                commentText={comment.text}
+                removeComment={props.removeComment}
+                addReply={props.addReply}
+            />
+        ))}
+    </div>
+</div>
 
-export default PostItem;
 
 
 
