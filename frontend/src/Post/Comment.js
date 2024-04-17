@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 
 function Comment({ id, user, time, commentText, removeComment, addReply, replies }) {
   const [replyText, setReplyText] = useState("");
@@ -10,9 +11,9 @@ function Comment({ id, user, time, commentText, removeComment, addReply, replies
 
   const handleReplySubmit = () => {
     if (replyText.trim() !== "") {
-      addReply(id, replyText); 
+      addReply(id, replyText);
       setReplyText("");
-      setShowReplyForm(false); 
+      setShowReplyForm(false);
     }
   };
 
@@ -32,22 +33,17 @@ function Comment({ id, user, time, commentText, removeComment, addReply, replies
         <button onClick={toggleReplyForm}>Reply</button>
         {showReplyForm && (
           <div>
-            <input
-              type="text"
-              value={replyText}
-              onChange={handleReplyChange}
-              placeholder="Reply..."
-            />
+            <input type="text" value={replyText} onChange={handleReplyChange} placeholder="Reply..." />
             <button onClick={handleReplySubmit}>Submit</button>
           </div>
         )}
         <div>
           {replies && replies.map(reply => (
-            <div key={reply.id}>
-              <p>{reply.user}: {reply.text}</p>
-              <p>{reply.time}</p>
-            </div>
-          ))}
+              <div key={reply.id}>
+                <p>{reply.user}: {reply.text}</p>
+                <p>{reply.time}</p>
+              </div>
+            ))}
         </div>
       </div>
     </div>

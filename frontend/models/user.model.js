@@ -25,7 +25,11 @@ const userSchema = new Schema({
   created_posts:{
     type: Array,
     required: true
-  }
+  },
+  followed_users:{
+    type: Array,
+    required: true
+  },
 }, {
   timestamps: true,
 });
