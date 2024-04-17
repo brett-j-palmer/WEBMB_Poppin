@@ -6,21 +6,27 @@ router.route('/').get((req, res) => {
     .then(users => res.json(users))
     .catch(err => res.status(400).json('Error: ' + err));
 });
-
-router.route('/add').post((req, res) => {
-  const username = req.body.username;
-  const password = req.body.password;
+router.route('/add').post(async (req, res) => {
+  const { username, password } = req.body;
   const defaultBio = "This is a default bio.";
   const liked_posts = [];
   const created_posts = [];
   const followed_users = [];
 
-  const newUser = new User({ username, password, bio: defaultBio, liked_posts, created_posts, followed_users });
-
-  newUser.save()
-    .then(() => res.json('User added!'))
-    .catch(err => res.status(400).json('Error: ' + err));
+  try {
+    const existingUser = await User.findOne({ username: username.trim() });
+    if (existingUser) {
+      return res.status(409).json({ message: 'Username is already taken' }); 
+    }
+    
+    const newUser = new User({ username, password, bio: defaultBio, liked_posts, created_posts });
+    await newUser.save();
+    res.json({ message: 'User added!' }); 
+  } catch (err) {
+    res.status(400).json({ message: 'Error: ' + err }); 
+  }
 });
+
 
 router.route('/:id').put((req, res) => {
   const userId = req.params.id;
