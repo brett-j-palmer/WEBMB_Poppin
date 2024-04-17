@@ -83,20 +83,20 @@ function ProfilePage() {
     <div className="App">
       <header className="profile-container">
         <div className="profile-header">
-          <img src={profilePicture} className="profile-picture" alt=""/>
+          <img src={profilePicture} className="profile-picture" alt="" />
           <h2>{username}</h2>
-          {isEditing ? (
-            <>
-              <textarea value={editableBio} onChange={handleBioChange} />
-              <button onClick={saveBio}>Save Bio</button>
-            </>
-          ) : (
-            <>
-              <p className="profile-bio">{editableBio}</p>
-              <button onClick={toggleEdit}>Edit Bio</button>
-            </>
-          )}
         </div>
+        {isEditing ? (
+          <div className="edit-bio-group">
+            <textarea value={editableBio} onChange={handleBioChange} />
+            <button onClick={saveBio}>Save Bio</button>
+          </div>
+        ) : (
+          <div className="edit-bio-group">
+            <p className="profile-bio">{editableBio}</p>
+            <button onClick={toggleEdit}>Edit Bio</button>
+          </div>
+        )}
         <div className="post-selections">
           {[1, 2, 3, 4].map(box => (
             <div key={box} className="post-selection">
@@ -127,6 +127,8 @@ function ProfilePage() {
       </header>
     </div>
   );
+  
+  
 }
 
 export default ProfilePage;
