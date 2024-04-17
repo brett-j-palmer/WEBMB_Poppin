@@ -6,6 +6,7 @@ import CommentControl from "./CommentControl";
 import Comment from "./Comment";
 import { useUser } from '../UserContext';
 import axios from 'axios';
+import './PostItem.css';
 
 function PostItem(props) {
     const [liked, setLiked] = React.useState(false);
@@ -86,45 +87,40 @@ function PostItem(props) {
     };
 
     return (
-        // border radius, can be used to change the shape of corners
-        <div style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <p style={{ margin: 0, fontSize: "30px" }}>Posted by: {props.username}</p>
-                <button onClick={toggleFollow} style={{ marginTop: "2px", marginLeft: "5px" }}>
-                    {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-            </div>
-            <div style={{ marginBottom: "10px" }}> 
-                <img src={props.file} width={450} onError={handleImageError} alt="" />
-            </div>
-            <p>{props.caption}</p>
-            <p>{props.rating}/10</p>
-            <p>#{props.tag}</p>
-            <button onClick={toggleLike}>
-                <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
-            </button>
-            {loggedInUsername === props.username && (
-                <button onClick={() => props.removeItem(props.id)}>Remove Post</button>
-            )}
-            <CommentControl addComment={props.addComment} postId={props.id} />
-            <div>
-                {props.comments.map(comment => (
-                    <Comment
-                        key={`${props.id}-${comment.id}`}
-                        id={comment.id}
-                        user={comment.user}
-                        time={comment.time}
-                        commentText={comment.text}
-                        removeComment={props.removeComment}
-                        addReply={props.addReply}
-                    />
-                ))}
-            </div>
-        </div>
-    );
-}
-
-export default PostItem;
+      <div className="post-item" style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+    <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <p style={{ margin: 0, fontSize: "30px" }}>Posted by: {props.username}</p>
+        <button onClick={toggleFollow} style={{ marginTop: "2px", marginLeft: "10px" }}>
+            {isFollowing ? "Unfollow" : "Follow"}
+        </button>
+    </div>
+    <div style={{ marginBottom: "10px" }}> 
+        <img src={props.file} width={450} onError={handleImageError} alt="" />
+    </div>
+    <p>{props.caption}</p>
+    <p>{props.rating}/10</p>
+    <p>#{props.tag}</p>
+    <button onClick={toggleLike}>
+        <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
+    </button>
+    {loggedInUsername === props.username && (
+        <button onClick={() => props.removeItem(props.id)}>Remove Post</button>
+    )}
+    <CommentControl addComment={props.addComment} postId={props.id} />
+    <div>
+        {props.comments.map(comment => (
+            <Comment
+                key={`${props.id}-${comment.id}`}
+                id={comment.id}
+                user={comment.user}
+                time={comment.time}
+                commentText={comment.text}
+                removeComment={props.removeComment}
+                addReply={props.addReply}
+            />
+        ))}
+    </div>
+</div>
 
 
 
