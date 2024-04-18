@@ -98,7 +98,10 @@ function PostItem(props) {
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{ marginBottom: "10px" }}> 
-                        <p style={{ margin: 0, fontSize: "30px" }}>@{props.username}</p>
+                        <p style={{ margin: 0, fontSize: "30px" }}>@{props.username}
+                        <button onClick={toggleFollow} style={{ marginTop: "2px", marginLeft: "10px" }}>
+                            {isFollowing ? "Unfollow" : "Follow"}
+                        </button></p>
                         <img src={props.file} style={{maxWidth: "300px", maxHeight: "250px", width: "auto", height: "auto"}} onError={handleImageError} alt="" />
                     </div>
                 </div>
