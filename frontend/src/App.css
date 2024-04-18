@@ -3,8 +3,9 @@
 }
 
 .App-logo {
-  height: 300px;
-  margin-bottom:-100px;
+  height: 500px;
+  margin-top:-150px;
+  margin-bottom:-150px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -36,5 +37,24 @@
   
   
 }
+
+.button-link {
+  display: inline-block;
+  padding: 10px 20px;
+  color: #fff;
+  background-color: #913662;
+  text-decoration: none;
+  border-radius: 5px;
+  text-align: center;
+  transition: background-color 0.3s;
+  cursor: pointer;
+  font-size: 20px;
+}
+.button-link:hover {
+  background-color: #5a1437; 
+}
+
+
+
 
 

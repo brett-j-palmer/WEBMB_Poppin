@@ -24,7 +24,7 @@ function Post(props) {
                     caption: post.caption,
                     rating: post.rating,
                     tag: post.tag
-                }));
+                })).reverse();
                 setPostItems(postsWithIds); 
 
                 postsWithIds.forEach(post => {
@@ -212,7 +212,9 @@ function Post(props) {
             ):(
                 <p>Loading...</p> 
             )}
+            <h3>Create A Post</h3>
             <PostControl addItem={addItem} username={myusername} />
+            <h3> </h3>
         </div>
     );
 }
