@@ -19,7 +19,7 @@ function ProfilePage() {
       await fetchUserBio();
     };
     fetchData();
-  }, [username]); // Add username to dependency array if username can change
+  }, [username]);
 
   const fetchPosts = async () => {
     try {
@@ -84,17 +84,17 @@ function ProfilePage() {
       <header className="profile-container">
         <div className="profile-header">
           <img src={profilePicture} className="profile-picture" alt="" />
-          <h2>{username}</h2>
+          <h2>@{username}</h2>
         </div>
         {isEditing ? (
           <div className="edit-bio-group">
             <textarea value={editableBio} onChange={handleBioChange} />
-            <button onClick={saveBio}>Save Bio</button>
+            <button onClick={saveBio} className="button" >Save Bio</button>
           </div>
         ) : (
           <div className="edit-bio-group">
             <p className="profile-bio">{editableBio}</p>
-            <button onClick={toggleEdit}>Edit Bio</button>
+            <button onClick={toggleEdit} className="button" >Edit Bio</button>
           </div>
         )}
         <div className="post-selections">
