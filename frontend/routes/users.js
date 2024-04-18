@@ -30,9 +30,11 @@ router.route('/add').post(async (req, res) => {
 
 router.route('/:id').put((req, res) => {
   const userId = req.params.id;
-  const { liked_posts, followed_users } = req.body;
+  //const { liked_posts, followed_users } = req.body;
+  const newData = req.body;
 
-  User.findByIdAndUpdate(userId, { liked_posts, followed_users }, { new: true })
+  // User.findByIdAndUpdate(userId, { liked_posts, followed_users }, { new: true })
+  User.findByIdAndUpdate(userId, newData, { new: true })
     .then(user => {
       if (!user) {
         return res.status(404).json({ message: 'User not found' });
