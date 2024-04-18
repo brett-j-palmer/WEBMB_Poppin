@@ -30,7 +30,7 @@ function Comment({ id, user, time, commentText, removeComment, addReply, replies
       <div>
         <p style={{ fontSize: "15px", margin: "0" }}>{commentText}</p>
         <button onClick={() => removeComment(id)}>Delete</button>
-        <button onClick={toggleReplyForm}>Reply</button>
+        {/* <button onClick={toggleReplyForm}>Reply</button> */}
         {showReplyForm && (
           <div>
             <input type="text" value={replyText} onChange={handleReplyChange} placeholder="Reply..." />

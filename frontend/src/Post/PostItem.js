@@ -1,7 +1,8 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import heartImage from './heart.png';
 import thumbsUpImage from './thumbs-up.png';
 import defaultImage from './default_image.png';
+import commentImage from './Comment.png';
 import CommentControl from "./CommentControl";
 import Comment from "./Comment";
 import { useUser } from '../UserContext';
@@ -9,8 +10,9 @@ import axios from 'axios';
 import './PostItem.css';
 
 function PostItem(props) {
-    const [liked, setLiked] = React.useState(false);
-    const [isFollowing, setIsFollowing] = React.useState(false);
+    const [liked, setLiked] = useState(false);
+    const [isFollowing, setIsFollowing] = useState(false);
+    const [showComments, setShowComments] = useState(false);
     const { username: loggedInUsername } = useUser();
 
     useEffect(() => {
@@ -71,7 +73,7 @@ function PostItem(props) {
                 }
                 axios.put("http://localhost:5001/users/" + user._id, user)
                     .then(response => {
-                        console.log("Post Liked Sucessfully");
+                        console.log("Post Liked Successfully");
                     })
                     .catch(error => {
                         console.log("Error,", error);
@@ -86,64 +88,62 @@ function PostItem(props) {
         event.target.src = defaultImage;
     };
 
+    const toggleComments = () => {
+        setShowComments(!showComments);
+    };
+    
     return (
-        <div className="post-item" style={{ border: "2px solid black", padding: "10px", margin: "15px", borderRadius: "10px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
-            <div style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <p style={{ margin: 0, fontSize: "30px" }}>Posted by: {props.username}</p>
-                <button onClick={toggleFollow} style={{ marginTop: "2px", marginLeft: "10px" }}>
-                    {isFollowing ? "Unfollow" : "Follow"}
-                </button>
-            </div>
-            <div style={{ marginBottom: "10px" }}> 
-                <img src={props.file} width={450} onError={handleImageError} alt="" />
-            </div>
-            <p>{props.caption}</p>
-            <p>{props.rating}/10</p>
-            <p>#{props.tag}</p>
-            <button onClick={toggleLike}>
-                <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
-            </button>
-            {loggedInUsername === props.username && (
-                <button onClick={() => props.removeItem(props.id)}>Remove Post</button>
-            )}
-            <CommentControl addComment={props.addComment} postId={props.id} />
-            <div>
-                {props.comments.map(comment => (
-                    <Comment
-                        key={`${props.id}-${comment.id}`}
-                        id={comment.id}
-                        user={comment.user}
-                        time={comment.time}
-                        commentText={comment.text}
-                        removeComment={props.removeComment}
-                        addReply={props.addReply}
-                    />
-                ))}
+        <div className="post-item" style={{ border: "2px solid black", padding: "10px", margin: "10px", borderRadius: "5px", backgroundColor: "rgba(0, 0, 0, 0.1)" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+
+                <div style={{ display: "flex", flexDirection: "column" }}>
+                    <div style={{ marginBottom: "10px" }}> 
+                        <p style={{ margin: 0, fontSize: "30px" }}>@{props.username}</p>
+                        <img src={props.file} style={{maxWidth: "300px", maxHeight: "250px", width: "auto", height: "auto"}} onError={handleImageError} alt="" />
+                    </div>
+                </div>
+
+                <div>
+                    <p style={{ margin: 15, fontSize: "25px", maxWidth: "300px" }}>{props.caption}</p>
+                </div>
+
+                <div style = {{margin: 15}}>
+                    <p>{props.rating}/10</p>
+                    <p style = {{fontSize: "30px"}}>#{props.tag}</p>
+                    {loggedInUsername === props.username && (
+                        <p><button onClick={() => props.removeItem(props.id)}>Remove Post</button></p>
+                    )}
+                </div>
+
+                <div>
+                    <button onClick={toggleLike}>
+                        <img src={liked ? heartImage : thumbsUpImage} alt="Like" style={{ width: "30px", height: "30px" }} />
+                    </button>
+                </div>
+
+                <div>
+                    <button onClick={toggleComments}> <img src={commentImage} alt="Comments" style={{ width: "30px", height: "30px" }} /> </button>
+                    <div id="CreateComment">
+                        {showComments && (
+                        <CommentControl addComment={props.addComment} postId={props.id} />
+                    )}
+                    </div>
+                    {showComments && props.comments.map(comment => (
+                        <Comment
+                            key={`${props.id}-${comment.id}`}
+                            id={comment.id}
+                            user={comment.user}
+                            time={comment.time}
+                            commentText={comment.text}
+                            removeComment={props.removeComment}
+                            addReply={props.addReply}
+                        />
+                    ))}
+                </div>
+                
             </div>
         </div>
     );
 }
+
 export default PostItem;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
