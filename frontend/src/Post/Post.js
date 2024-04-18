@@ -48,21 +48,20 @@ function Post(props) {
                 var postID = response.data.postId;
                 console.log("PostID", postID)
 
-                axios.get("http://localhost:5001/users/username/" + myusername)
+                axios.get("http://localhost:5001/users/username/" + username)
                 .then(response => {
                     var user = response.data;
-    
+                    console.log("user: ", response.data);
                     user.created_posts.push(postID);
-    
+                    
+                    console.log("created posts:", user.created_posts);
                     axios.put("http://localhost:5001/users/" + user._id, user)
                     .then(response => {
-                        console.log("Post Created Sucessfully");
+                        console.log("Post put into user Sucessfully");
                     })
                     .catch(error => {
                         console.log("Error,", error);
-        
                     });
-                    
                 })            
                 .catch(error => {
                     console.error('Error creating post:', error)
