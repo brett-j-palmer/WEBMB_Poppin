@@ -19,7 +19,7 @@ function ProfilePage() {
       await fetchUserBio();
     };
     fetchData();
-  }, [username]); // Add username to dependency array if username can change
+  }, [username]);
 
   const fetchPosts = async () => {
     try {
