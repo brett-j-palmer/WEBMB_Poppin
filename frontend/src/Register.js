@@ -3,7 +3,6 @@ import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from './logo.svg';
 import './App.css';
-import icon from './icon.svg';
 
 function Register() {
   const [username, setUsername] = useState('');
@@ -56,9 +55,7 @@ function Register() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <img src={icon} className="App-icon" alt="icon" />
-
+      <img src={logo} className="App-logo" alt="logo" />
         <div className="Register">
           <h2>Register Page</h2>
           <form onSubmit={handleSubmit}>
@@ -74,7 +71,7 @@ function Register() {
             </label>
             {passwordError && <div style={{ color: 'red' }}>{passwordError}</div>}
             <br />
-            <button type="submit">Register</button>
+            <button type="submit" className="button" >Register</button>
           </form>
           <p>
             Already have an account? <Link to="/login">Login</Link>

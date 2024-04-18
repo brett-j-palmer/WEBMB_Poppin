@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from './UserContext'; 
+import './App.css';
+import logo from './logo.svg';
 
 function Login() {
   const [localUsername, setLocalUsername] = useState(''); 
@@ -35,6 +37,7 @@ function Login() {
   return (
     <div className="App">
       <header className="App-header">
+      <img src={logo} className="App-logo" alt="logo" />
         <div className="Login">
           <h2>Login Page</h2>
           <form onSubmit={handleSubmit}>
@@ -48,7 +51,7 @@ function Login() {
               <input type="password" value={password} onChange={handlePasswordChange} />
             </label>
             <br />
-            <button type="submit">Login</button>
+            <button type="submit" className="button" > Login</button>
           </form>
           <p>
             Don't have an account? <Link to="/register">Register</Link>
