@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useUser } from './UserContext'; 
+import logo from './logo.svg';
 
 function Login() {
   const [localUsername, setLocalUsername] = useState(''); 
@@ -35,6 +36,7 @@ function Login() {
   return (
     <div className="App">
       <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
         <div className="Login">
           <h2>Login Page</h2>
           <form onSubmit={handleSubmit}>
