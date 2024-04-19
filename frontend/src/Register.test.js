@@ -14,6 +14,8 @@ jest.mock('react-router-dom', () => ({
   Link: () => 'Link' 
 }));
 
+
+
 // Test if a valid username/password results in a successful registration
 test('successful registration navigates to login page', async () => {
   render(<Register />);
