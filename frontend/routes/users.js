@@ -59,14 +59,16 @@ router.route('/login').post(async (req, res) => {
   const { username, password } = req.body;
 
   try {
-    const user = await User.findOne({ username, password });
-    if (user) {
-      res.json({ message: 'Login successful' });
-    } else {
-      res.status(401).json({ message: 'Invalid credentials' });
+    const user = await User.findOne({ username: username.trim() });
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    } 
+    if (user.password !== password) {
+      return res.status(401).json({ message: 'Incorrect password' });
     }
+    res.json({ message: 'Login successful' });
   } catch (error) {
-    res.status(500).json({ message: 'Internal server error' });
+    res.status(500).json({ message: 'Internal server error', error });
   }
 });
 
