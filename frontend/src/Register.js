@@ -41,7 +41,7 @@ function Register() {
   
     try {
       await axios.post('http://localhost:5001/users/add', { username, password });
-      console.log('User registered successfully:', { username, password });
+      //console.log('User registered successfully:', { username, password });
       navigate('/login');
     } catch (error) {
       if (error.response && error.response.status === 409) {
