@@ -48,13 +48,29 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   width: 100%;
+  justify-content: center; /* Center the grid horizontally */
+  padding: 0 20px; /* Optional padding for spacing */
 }
+
 
 .post-selection {
   background-color: #fff;
   padding: 20px; /* Adjust padding as necessary */
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-selection h3 {
+  font-size: 14px; /* Set smaller font size for "Select a Post" title */
+  margin-bottom: 5px; /* Adjust spacing below the title */
+}
+
+.post-selection select {
+  font-size: 12px; /* Set smaller font size for the <select> dropdown */
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .button {
@@ -71,5 +87,20 @@
 }
 .button:hover {
   background-color: #5a1437; 
+}
+
+.selected-post {
+  margin-top: 10px; /* Adjust spacing between post-selection boxes */
+}
+
+.selected-post h3 {
+  font-size: 16px; /* Example: Set font size for selected post title */
+  font-weight: bold; /* Example: Set font weight for selected post title */
+  font-family: 'Arial', sans-serif; /* Example: Set custom font family */
+}
+
+.selected-post p {
+  font-size: 14px; /* Example: Set font size for selected post content */
+  font-family: 'Arial', sans-serif; /* Example: Set custom font family */
 }
 
