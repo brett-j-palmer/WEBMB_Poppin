@@ -22,7 +22,7 @@
 .profile-header {
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: center; 
   width: 100%;
   margin-bottom: 20px; 
 }
@@ -48,13 +48,30 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
   width: 100%;
+  justify-content: center; 
+  padding: 0 20px; 
 }
+
 
 .post-selection {
   background-color: #fff;
   padding: 20px; 
   border-radius: 10px;
   box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.post-selection h3 {
+  font-size: 16px;
+  font-family: 'Georgia', sans-serif;
+  margin-bottom: 5px; 
+}
+
+.post-selection select {
+  font-size: 12px; 
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
 }
 
 .button {
@@ -71,5 +88,20 @@
 }
 .button:hover {
   background-color: #5a1437; 
+}
+
+.selected-post {
+  margin-top: 20px; 
+}
+
+.selected-post h3 {
+  font-size: 16px; 
+  font-weight: bold; 
+  font-family: 'Georgia', sans-serif; 
+}
+
+.selected-post p {
+  font-size: 16px; 
+  font-family: 'Georgia', serif; 
 }
 
