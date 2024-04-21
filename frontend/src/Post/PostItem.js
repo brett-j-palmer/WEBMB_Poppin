@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from 'react-router-dom';
 import heartImage from './heart.png';
 import thumbsUpImage from './thumbs-up.png';
 import defaultImage from './default_image.png';
@@ -98,10 +99,14 @@ function PostItem(props) {
 
                 <div style={{ display: "flex", flexDirection: "column" }}>
                     <div style={{ marginBottom: "10px" }}> 
-                        <p style={{ margin: 0, fontSize: "30px" }}>@{props.username}
+                    <p style={{ margin: 0, fontSize: "30px" }}>
+                        <Link to={`/profile/${props.username}`} className="link-user">
+                            @{props.username}
+                        </Link>
                         <button onClick={toggleFollow} style={{ marginTop: "2px", marginLeft: "10px" }}>
                             {isFollowing ? "Unfollow" : "Follow"}
-                        </button></p>
+                        </button>
+                    </p>
                         <img src={props.file} style={{maxWidth: "300px", maxHeight: "250px", width: "auto", height: "auto"}} onError={handleImageError} alt="" />
                     </div>
                 </div>

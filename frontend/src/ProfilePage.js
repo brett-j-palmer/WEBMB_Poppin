@@ -5,23 +5,30 @@ import profilePicture from './Post/heart.png';
 import PostItem from './Post/PostItem';
 import axios from 'axios';
 import { useUser } from './UserContext';
+import { useParams } from 'react-router-dom';
+
 
 function ProfilePage() {
-  const { username } = useUser();
+  const { username: urlUsername } = useParams();
+  const { username: loggedInUsername } = useUser(); 
+  const isCurrentUser = !urlUsername || urlUsername === loggedInUsername; 
+
   const [editableBio, setEditableBio] = useState('');
   const [isEditing, setIsEditing] = useState(false);
+  const [posts, setPosts] = useState([]);
   const [selectedPost, setSelectedPost] = useState({});
-  const [posts, setPosts] = useState(JSON.parse(localStorage.getItem('createdPosts')) || []);
+
 
   useEffect(() => {
     const fetchData = async () => {
-      await fetchPosts();
-      await fetchUserBio();
+      const usernameToUse = urlUsername || loggedInUsername; 
+      await fetchPosts(usernameToUse);
+      await fetchUserBio(usernameToUse);
     };
     fetchData();
-  }, [username]);
+  }, [urlUsername, loggedInUsername]);
 
-  const fetchPosts = async () => {
+  const fetchPosts = async (username) => {
     try {
       const response = await axios.get(`http://localhost:5001/users/username/${username}`);
       const createdPostIDs = response.data.created_posts;
@@ -46,7 +53,7 @@ function ProfilePage() {
     }
   };
 
-  const fetchUserBio = async () => {
+  const fetchUserBio = async (username) => {
     try {
       const response = await axios.get(`http://localhost:5001/users/username/${username}`);
       setEditableBio(response.data.bio || `I am ${username}. I love coding and coffee.`);
@@ -60,15 +67,20 @@ function ProfilePage() {
   };
 
   const toggleEdit = () => {
-    setIsEditing(true);
+    if (isCurrentUser) {
+      setIsEditing(true);
+    }
   };
 
   const saveBio = async () => {
-    try {
-      const response = await axios.patch(`http://localhost:5001/users/updateBio/${username}`, { bio: editableBio });
-      setIsEditing(false);
-    } catch (error) {
-      console.error('Error updating bio:', error);
+    if (isCurrentUser) {
+      try {
+        const response = await axios.patch(`http://localhost:5001/users/updateBio/${loggedInUsername}`, { bio: editableBio });
+        setIsEditing(false); 
+        console.log('Bio updated successfully:', response.data); 
+      } catch (error) {
+        console.error('Error updating bio:', error);
+      }
     }
   };
 
@@ -83,19 +95,23 @@ function ProfilePage() {
     <div className="App">
       <header className="profile-container">
         <div className="profile-header">
-          <img src={profilePicture} className="profile-picture" alt="" />
-          <h2>@{username}</h2>
+          <img src={profilePicture} alt="Profile" className="profile-picture" />
+          <h2>@{urlUsername || loggedInUsername}</h2>
         </div>
-        {isEditing ? (
-          <div className="edit-bio-group">
-            <textarea value={editableBio} onChange={handleBioChange} />
-            <button onClick={saveBio} className="button" >Save Bio</button>
-          </div>
+        {isCurrentUser ? (
+          isEditing ? (
+            <div className="edit-bio-group">
+              <textarea value={editableBio} onChange={(e) => setEditableBio(e.target.value)} />
+              <button onClick={saveBio} className="button">Save Bio</button>
+            </div>
+          ) : (
+            <div className="edit-bio-group">
+              <p className="profile-bio">{editableBio}</p>
+              <button onClick={toggleEdit} className="button">Edit Bio</button>
+            </div>
+          )
         ) : (
-          <div className="edit-bio-group">
-            <p className="profile-bio">{editableBio}</p>
-            <button onClick={toggleEdit} className="button" >Edit Bio</button>
-          </div>
+          <p className="profile-bio">{editableBio}</p>
         )}
         <div className="post-selections">
           {[1, 2, 3, 4].map(box => (
@@ -127,6 +143,7 @@ function ProfilePage() {
       </header>
     </div>
   );
+  
   
   
 }

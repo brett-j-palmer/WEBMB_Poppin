@@ -12,3 +12,15 @@
 	font-family: Arial, sans-serif;
 	font-size: 40px;
 }
+
+.link-user {
+    color: #007BFF; /* A bright blue color, commonly used for links */
+    text-decoration: underline; /* Underline to indicate it's a link */
+    cursor: pointer; /* Changes the cursor to a pointer to indicate interactivity */
+    transition: color 0.3s; /* Smooth transition for hover effects */
+}
+
+.link-user:hover {
+    color: #0056b3; /* A darker blue when hovered over */
+    text-decoration: none; /* Optional: remove underline on hover for a change */
+}
