@@ -7,7 +7,9 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5001;
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://<your-frontend-domain>.com' // Adjust this to your frontend's actual domain
+}));
 app.use(express.json());
 
 const uri = process.env.ATLAS_URI;
