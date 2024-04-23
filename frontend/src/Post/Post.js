@@ -15,7 +15,7 @@ function Post(props) {
     const { username } = useUser();
 
     const fetchPosts = useCallback(() => {
-        axios.get('https://poppin-webmb.onrender.com/posts')
+        axios.get('http://localhost:5001/posts')
             .then(response => {
                 const postsWithIds = response.data.map(post => ({
                     id: post._id,
@@ -42,20 +42,20 @@ function Post(props) {
     }, []);
 
     const addItem = (postData) => {
-        axios.post('https://poppin-webmb.onrender.com/posts/add', postData) 
+        axios.post('http://localhost:5001/posts/add', postData) 
             .then(response => {
                 console.log('Post added successfully:', response.data);
                 var postID = response.data.postId;
                 console.log("PostID", postID)
 
-                axios.get("https://poppin-webmb.onrender.com/users/username/" + username)
+                axios.get("http://localhost:5001/users/username/" + username)
                 .then(response => {
                     var user = response.data;
                     console.log("user: ", response.data);
                     user.created_posts.push(postID);
                     
                     console.log("created posts:", user.created_posts);
-                    axios.put("https://poppin-webmb.onrender.com/users/" + user._id, user)
+                    axios.put("http://localhost:5001/users/" + user._id, user)
                     .then(response => {
                         console.log("Post put into user Sucessfully");
                     })
@@ -77,7 +77,7 @@ function Post(props) {
 
     const addComment = async (commentData) => {
         try {
-            const response = await axios.post('https://poppin-webmb.onrender.com/comments/add', {
+            const response = await axios.post('http://localhost:5001/comments/add', {
                 ...commentData,
                 user: username,
               });          console.log('comment added successfully:', response.data);
@@ -101,7 +101,7 @@ function Post(props) {
 
       const addReply = async (commentId, replyText) => {
         try {
-            const response = await axios.post('https://poppin-webmb.onrender.com/comments/addReply', { commentId, replyText });
+            const response = await axios.post('http://localhost:5001/comments/addReply', { commentId, replyText });
             console.log('Reply added successfully:', response.data);
     
             const updatedComments = comments.map(comment => {
@@ -122,7 +122,7 @@ function Post(props) {
 
       const fetchCommentsByPostId = async (postId) => {
         try {
-          const response = await axios.get(`https://poppin-webmb.onrender.com/comments/byPostId/${postId}`);
+          const response = await axios.get(`http://localhost:5001/comments/byPostId/${postId}`);
           const formattedComments = response.data.map(comment => ({
             id: comment._id,
             postId: comment.postId,
@@ -142,7 +142,7 @@ function Post(props) {
 
     const removeItem = (id) => {
         console.log("Removing post with id:", id); 
-        axios.delete(`https://poppin-webmb.onrender.com/posts/${id}`)
+        axios.delete(`http://localhost:5001/posts/${id}`)
             .then(response => {
                 console.log('Post deleted successfully:', response.data);
                 fetchPosts();
@@ -153,7 +153,7 @@ function Post(props) {
             });
 
 
-            axios.get("https://poppin-webmb.onrender.com/users/username/" + myusername)
+            axios.get("http://localhost:5001/users/username/" + myusername)
             .then(response => {
                 var user = response.data;
 
@@ -162,7 +162,7 @@ function Post(props) {
                     user.created_posts.splice(index, 1);
                 }
 
-                axios.put("https://poppin-webmb.onrender.com/users/" + user._id, user)
+                axios.put("http://localhost:5001/users/" + user._id, user)
                 .then(response => {
                     console.log("Post Removed Sucessfully");
                 })
@@ -177,7 +177,7 @@ function Post(props) {
 
     const removeComment = async (commentId) => {
         try {
-          const response = await axios.delete(`https://poppin-webmb.onrender.com/comments/${commentId}`);
+          const response = await axios.delete(`http://localhost:5001/comments/${commentId}`);
           console.log('Server response:', response.data);
       
           const newComments = comments.filter((comment) => comment.id !== commentId);

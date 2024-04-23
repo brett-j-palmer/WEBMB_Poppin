@@ -40,7 +40,7 @@ function Register() {
     }
   
     try {
-      await axios.post('https://poppin-webmb.onrender.com/users/add', { username, password });
+      await axios.post('http://localhost:5001/users/add', { username, password });
       //console.log('User registered successfully:', { username, password });
       navigate('/login');
     } catch (error) {
