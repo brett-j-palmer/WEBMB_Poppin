@@ -3,6 +3,7 @@ import PostItem from "./PostItem";
 import PostControl from "./PostControl";
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
+import { useUser } from '../UserContext'; 
 
 function Post(props) {
     const [postItems, setPostItems] = useState([]);
@@ -11,6 +12,7 @@ function Post(props) {
     const [setShowComments] = useState(false); 
     const {state} = useLocation();
     const { username: myusername} = state;
+    const { username } = useUser();
 
     const fetchPosts = useCallback(() => {
         axios.get('http://localhost:5001/posts')
@@ -22,7 +24,7 @@ function Post(props) {
                     caption: post.caption,
                     rating: post.rating,
                     tag: post.tag
-                }));
+                })).reverse();
                 setPostItems(postsWithIds); 
 
                 postsWithIds.forEach(post => {
@@ -46,21 +48,20 @@ function Post(props) {
                 var postID = response.data.postId;
                 console.log("PostID", postID)
 
-                axios.get("http://localhost:5001/users/username/" + myusername)
+                axios.get("http://localhost:5001/users/username/" + username)
                 .then(response => {
                     var user = response.data;
-    
+                    console.log("user: ", response.data);
                     user.created_posts.push(postID);
-    
+                    
+                    console.log("created posts:", user.created_posts);
                     axios.put("http://localhost:5001/users/" + user._id, user)
                     .then(response => {
-                        console.log("Post Created Sucessfully");
+                        console.log("Post put into user Sucessfully");
                     })
                     .catch(error => {
                         console.log("Error,", error);
-        
                     });
-                    
                 })            
                 .catch(error => {
                     console.error('Error creating post:', error)
@@ -76,15 +77,18 @@ function Post(props) {
 
     const addComment = async (commentData) => {
         try {
-          const response = await axios.post('http://localhost:5001/comments/add', commentData);
-          console.log('comment added successfully:', response.data);
+            const response = await axios.post('http://localhost:5001/comments/add', {
+                ...commentData,
+                user: username,
+              });          console.log('comment added successfully:', response.data);
           fetchPosts();
       
           const currentTime = new Date().toLocaleString();
+          
           const newComment = {
             id: response.data.commentId,
             postId: commentData.postId,
-            user: "User",
+            user: username,
             text: commentData.commentText || '',
             time: currentTime,
           };
@@ -207,7 +211,9 @@ function Post(props) {
             ):(
                 <p>Loading...</p> 
             )}
+            <h3>Create A Post</h3>
             <PostControl addItem={addItem} username={myusername} />
+            <h3> </h3>
         </div>
     );
 }

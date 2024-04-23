@@ -11,15 +11,17 @@ function Tag(props){
 
 
     return(
-        <select onChange={handleTagChange} defaultValue="">
-            <option value="" disabled>Select tag</option>
-            <option value="movie">Movie</option>
-            <option value="music">Music</option>
-            <option value="book">Book</option>
-            <option value="game">Game</option>
+        <label>
+            Tag:
+            <select onChange={handleTagChange} defaultValue="">
+                <option value="" disabled>Select tag</option>
+                <option value="movie">Movie</option>
+                <option value="music">Music</option>
+                <option value="book">Book</option>
+                <option value="game">Game</option>
 
-        </select>
-        
+            </select>
+        </label>
 
     );
 }
